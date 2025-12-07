@@ -1,0 +1,564 @@
+import { useState, useContext, memo, useRef } from 'react'
+import addFolder from './assets/pictures/add_folder.svg'
+import folder from './assets/pictures/folder.svg'
+import undo from './assets/pictures/undo.svg'
+import redo from './assets/pictures/redo.svg'
+import dots from './assets/pictures/dots.svg'
+
+import cross from './assets/pictures/cross.svg';
+import file from './assets/pictures/file.svg';
+import trash from './assets/pictures/trash.svg';
+
+import expand from './assets/pictures/expand.svg'
+import zenIcon from './assets/pictures/zen.svg';
+import search from './assets/pictures/search.svg'
+
+import Notifications from './Notifications'
+import './App.css'
+import { EditorControls } from './EditorControls'
+import { Editor } from './Editor'
+import { PanelControls } from './PanelControls'
+import { PanelFiles } from './PanelFiles'
+import { createPortal } from 'react-dom'
+
+// TODO: make an actual documentation directory for these TODOs...
+// TODO: update arrow icon (24dp, eee)
+// TODO: add warning type to notifications
+// TODO: introduce context provider for the all of the main editor operations
+
+let importedId = 0;
+
+const version = 'v0.1.0'; // could be used later to ensure compatibility with outdated json of the saves
+// localStorage.setItem('v', ... );
+
+const readmeTitle = `⚙️ Your Minimal Editor ${version}`;
+const readmeContent =
+`[info]
+Quick info:
+This is a plain text editor. No links, no formatting, no images.
+
+The files are stored in your the browser memory (local storage). Local storage is able to hold about 5-10 MB of memory, which is enough to write a few decently-sized novels.
+
+This is just the first implementation of a minimal editor that I decided to make when exploring React. Dipping my toes into the water, one may say.
+
+[features]
+Main features:
+- Add & Delete files
+- Files have a title and content
+- Import and export text files
+- Data is preserved with local storage
+- ... More to come!
+
+Additionally, the editor is being tested to work well across different devices and browsers.
+
+[aspirations]
+In future iterations of this editor, IndexedDB would be used instead, which allows significantly more space (exact size may vary) and is not blocking, making the saving operations asynchronous (unlike local storage).
+
+StorageManager API would be later leveraged to ensure better client-side UX. PWA is also an option to explore, due to potential offline support.
+
+Other features would be added to enhance this editor further.
+
+[more]
+If you wish to learn more, you can find additional information on GitHub:
+https://github.com/theParitet/minimal-editor
+(direct hyperlink link can be found in Settings (gear icon) > About)`;
+const readme = {
+  id: -1,
+  title: readmeTitle,
+  content: readmeContent,
+}
+
+// initialization
+let data = JSON.parse(localStorage.getItem('saves'));
+if (!data) {
+  data = [readme];
+}
+
+let pref = JSON.parse(localStorage.getItem('pref'));
+if (!pref) {
+  pref = {
+    button_is_inset: false,
+    value_of_padding: .5, //rem
+    corners: .5, //rem
+  };
+}
+
+let id;
+console.log('LAST ITEM:',localStorage.getItem('last'));
+const lastItem = parseInt(localStorage.getItem('last'));
+
+if (lastItem || lastItem === 0) {
+  id = lastItem;
+}
+
+export default function App() {
+  const [fileId, setFileId] = useState(id); // should use local storage to check last saves
+  const [saves, setSaves] = useState(data); // should set the state based on the local storage
+  const [statuses, setStatuses] = useState([]);
+  const [isPanelCollapsed, setIsPanelCollapsed] = useState(true);
+
+  const [notifications, setNotifications] = useState([]);
+
+  const [preferences, setPreferences] = useState(pref);
+  const [inert, setInert] = useState(false);
+  const [zen, setZen] = useState(false);
+
+  const titleRef = useRef(null);
+  const contentRef = useRef(null);
+
+  const currentFile = findById(saves, fileId);
+
+  console.log('>>>>>>>>>>>>>>>>>>RERENDER');
+  console.log('current id:',fileId);
+  console.log('current file:',currentFile);
+  console.log('saves:',saves);
+  
+  function getNextId(givenSaves = saves) {
+    let lastId = 0;
+    console.log(givenSaves);
+    
+    const ids = givenSaves.map(save => save.id);
+    ids.forEach(id => {
+      if (id > lastId) {
+        lastId = id + 1;
+      } else if (id === lastId) {
+        lastId++;
+      }
+    })
+    return lastId;
+  }
+
+  const handleNewFile = () => {
+    const copy = saves.slice();
+    const nextId = getNextId();
+    copy.push({
+      id: nextId,
+      title: '',
+      content: '',
+    });
+
+    setSaves(copy);
+    setFileId(nextId);
+    setTimeout(() => {
+      titleRef.current.focus();
+    }, 1);
+
+    setData('saves', JSON.stringify(copy));
+    setData('last', nextId);
+
+  };
+
+
+  const handleContentChange = e => {
+    if (fileId || fileId === 0) {
+      const modifiedSaves = saves.map(save => {
+        if (save.id !== fileId) {
+          return save;
+        } else {
+          const text = e.target.value+'';
+          return {
+            ...save,
+            content: text,
+          }
+        }
+      });
+      setSaves(modifiedSaves);
+      setData('saves', JSON.stringify(modifiedSaves));
+    }
+  };
+
+  const handleTitleChange = e => {
+    if (fileId || fileId === 0) {
+      let title = e.target.value;
+      
+      const modifiedSaves = saves.map(save => {
+        if (save.id !== fileId) {
+          return save;
+        } else {
+          return {
+            ...save,
+            title: title,
+          }
+        }
+      });
+
+      setSaves(modifiedSaves);
+      setData('saves', JSON.stringify(modifiedSaves));
+    }
+  }
+
+  const handleAddReadme = () => {
+    if (!findById(saves, -1)) {
+      const copy = saves.slice();
+      copy.push(readme);
+      setSaves(copy)
+      setData('saves', JSON.stringify(copy));
+    }
+    setFileId(-1);
+    setData('last', -1);
+  };
+
+  function changeFile (id) {
+    setFileId(id);
+    setData('last', id);
+    setIsPanelCollapsed(true);
+  };
+
+  function deleteFile (id) {
+    if (id === fileId) {
+      setFileId(null);
+      setData('last', null);
+    }
+
+    const modifiedSaves = saves.filter(save => save.id !== id);
+    setSaves(modifiedSaves);
+    setData('saves', JSON.stringify(modifiedSaves));
+  }
+
+  const handleStatusesDelete = () => {
+    setStatuses([]);
+  };
+
+
+
+  const handleImport = async e => {
+    const initFiles = e.target.files;
+    // const newFiles = [];
+    const fileData = []; //title + error (if any) 
+
+
+    const tempSaves = saves.slice();
+    // trying to push every new file
+    for (const file of initFiles) {
+      let title = file.name;
+
+      try {
+        const content = await file.text();
+        
+        const nextId = getNextId(tempSaves);
+        const fileObj = {
+          id: nextId,
+          title: title,
+          content: content
+        }
+
+        tempSaves.push(fileObj);
+
+        setData('saves', JSON.stringify(tempSaves), 0, true);
+        setData('last', nextId, 0, true);
+        setFileId(nextId);
+
+        fileData.push({
+          title: title,
+          error: '',
+        });
+
+      } catch (err) {
+        tempSaves.pop();
+
+        console.error(err);
+        fileData.push({
+          title: title,
+          error: err.message,
+        });
+
+      }
+      
+    }
+
+    const copy = statuses.slice();
+    copy.push({
+      id: importedId++,
+      files: fileData,
+    });
+    setStatuses(copy);
+
+    setSaves(tempSaves);
+    setData('saves', JSON.stringify(tempSaves));
+    
+  }
+
+  const handleExport = () => {
+    const blob = new Blob([currentFile.content], {type: 'text/*'});
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+
+    const fileName = currentFile.title;
+
+    const fileExtensionRegex = /(\.[a-zA-Z]{1,5})$/g; // probably close
+    const isLegitFileExtension = fileExtensionRegex.test(fileName);
+    const extension = isLegitFileExtension ? '' : '.txt';
+    const exportedFileName = fileName ? fileName + extension : 'New File' + currentFile.id + extension;
+
+    link.download = exportedFileName;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(link.href);
+  }
+
+  function addNotification(notification) {
+    const copy = notifications.slice();
+
+    if (typeof notification === 'number') {
+      switch (notification) {
+        case 0:
+          notification = {
+            type: 'danger',
+            message: 'Unable to Save Changes',
+            description: 'Browser storage exceeded (5+ MB of memory). Unable to write more data. Refer to... Or revert changes...',
+          };
+          break;
+        case 5:
+          notification = {
+            type: 'warning',
+            message: 'Storage is not Persistent',
+            description: 'You are limited to the browser storage that is susceptible to erasing. To ensure your data won\'t be deleted, refer to...',
+          }
+          break;
+        default:
+          notification = {
+            type: 'danger',
+            message: 'Unable to Save Changes',
+            description: 'Unknown reason. Submit an issue to Github...',
+          }
+          break;
+      }
+    }
+
+    copy.push(notification);
+    setNotifications(copy);
+  }
+
+  const handleDeleteNotification = (description) => {
+    const copy = notifications.slice();
+    setNotifications(copy.filter(notification => notification.description !== description));
+  }
+
+  function setData(key, data, failMessage = 0, throwError = false) {
+
+    try {
+      localStorage.setItem(key, data);
+      return true;
+    } catch (e) {
+      console.log('PASSED IN TOT HE SHOW FUNCION',e.name === 'QuotaExceededError' ? failMessage : 1);
+      addNotification(e.name === 'QuotaExceededError' ? failMessage : 1);
+      if (throwError) {
+        throw new Error(e.name);
+      }
+      return false;
+    }
+  }
+
+  console.log('RERENDER<<<<<<<<<<<<<<<<<<');
+
+  return (
+    <>
+      <header className='header' inert={inert}>
+        <h1 className='header__hero'>The <span className='header__hero--highlight'>Minimal</span> Editor</h1>
+        <button className='header__btn' onClick={handleAddReadme}>Learn more</button>
+      </header>
+
+      {/* modal (settings) */}
+      {inert && createPortal(
+        <Modal handleInert={() => setInert(!inert)} preferences={preferences} setPreferences={setPreferences} setData={setData}/>,
+        document.body
+      )}
+      {/* inert */}
+      
+      { notifications.length !== 0 &&
+        <Notifications notifications={notifications} handleDeleteNotification={handleDeleteNotification} inert={inert} /> }
+      {/* notifications (managing overflow) */}
+
+      <main id='manager' className={(!zen ? '' : ' zen') + (preferences.button_is_inset ? ' inset' : '')} inert={inert}>
+
+        {zen &&
+          <button className='btn-zen' onClick={() => setZen(!zen)}>
+            <img src={zenIcon} alt="" />
+          </button>
+        }
+
+        <article id='panel' className={(!isPanelCollapsed ? 'manager__panel' : 'manager__panel collapsed')} >
+
+          <PanelControls statuses={statuses} handleNewFile={handleNewFile} handleImport={handleImport} handleStatusesDelete={handleStatusesDelete} handleZen={() => setZen(!zen)} handleSettings={() => setInert(!inert)} />
+          <PanelFiles id={fileId} saves={saves} changeFile={changeFile} deleteFile={deleteFile} preferences={preferences} />
+          <button className='manager__panel__expand-btn' onClick={() => {
+            setIsPanelCollapsed(!isPanelCollapsed);
+          }}>
+            <img src={expand} alt="" style={!isPanelCollapsed ? {rotate: '180deg'} : {}} />
+          </button>
+
+        </article>
+      
+        <article id='editor' className='manager__editor'>
+
+          <EditorControls hasChosenFile={currentFile ? true : false} handleExport={handleExport} />
+          <Editor isPanelCollapsed={isPanelCollapsed} file={currentFile} titleRef={titleRef} contentRef={contentRef} handleTitleChange={handleTitleChange} handleContentChange={handleContentChange} />
+
+        </article>
+
+      </main>
+    </>
+  )
+}
+
+
+function findById(arr, id) {
+  return arr.find(el => el.id === id);
+}
+
+
+
+
+
+
+function Modal({handleInert, preferences, setPreferences, setData}) {
+  const [current, setCurrent] = useState(null);
+
+  const content = [
+    'Appearance',
+    'Storage',
+    'About'
+  ];
+
+  return (
+    <main id='modal-container'>
+      <div>
+
+        <button className='btn-img btn-img--default' onClick={handleInert}>
+          <img src={cross} alt='' />
+        </button>
+
+        <div className='modal'>
+          <div className='modal__options'>
+            {content.map(option => {
+              return (
+              <button className={'modal__options__option' + (current === option ? ' active' : '')}
+                onClick={() => setCurrent(option)} key={option}>
+                {option}
+              </button>
+              )
+            })}
+          </div>
+          <div className='modal__content'>
+            <h1 className='modal__content__title'>{current}</h1>
+            <SettingsContent current={current} preferences={preferences} setPreferences={setPreferences} setData={setData} />
+          </div>
+        </div>
+
+      </div>
+    </main>
+  );
+}
+
+function SettingsContent({current, preferences, setPreferences, setData}) {
+  const [padding, setPadding] = useState(preferences.value_of_padding);
+  const [smoothness, setSmoothness] = useState(preferences.corners);
+  switch (current) {
+    case null:
+      return (
+        <p className='placeholder'>Choose what you want to tinker with...</p>
+      )
+    case 'Appearance':
+      return (
+        <>
+          <p>These settings are currently applied to a portion of the elements.</p>
+
+          <h3>Preview</h3>
+          <div className='settings__options__preview'>
+            <label className='record selected'
+              style={{
+                margin: '0px auto',
+                width: '75%',
+                '--record-padding': `${preferences.value_of_padding}rem`,
+                '--border-radius' : `${preferences.corners}rem`
+              }}>
+              <button className={'record__file'}>
+                <img src={file} alt="File icon" />
+                <p className={'record__title'}>Lorem ipsum dolor</p>
+              </button>
+              <button className={'btn-img btn-img--danger record__trash' + (preferences.button_is_inset ? ' btn-inset' : '')}>
+                <img src={trash} alt="Delete a file" />
+              </button>
+            </label>
+          </div>
+
+          <h3>Button type</h3>
+          <div className='settings__options'>
+            <label className='btn-img btn-img--default btn-inset' htmlFor='btn-is-inset1'>
+              <img src={search} alt='' />
+            </label>
+            <label className='btn-img btn-img--default' htmlFor='btn-is-inset2'>
+              <img src={search} alt=''/>
+            </label>
+          </div>
+
+          <div className='settings__options'>
+            <input id='btn-is-inset1' type='radio' name='option' onChange={()=>{
+              const pref = {
+                ...preferences,
+                button_is_inset: true,
+              }
+              setPreferences(pref);
+              setData('pref', JSON.stringify(pref));
+            }} checked={preferences.button_is_inset} />
+            <input id='btn-is-inset2' type='radio' name='option' onChange={()=>{
+              const pref = {
+                ...preferences,
+                button_is_inset: false,
+              }
+              setPreferences(pref);
+              setData('pref', JSON.stringify(pref));
+            }} checked={!preferences.button_is_inset} />
+          </div>
+
+
+          <div className='settings__options grid'>
+            <h3>Padding</h3>
+            <h3>Smoothness</h3>
+            <input type='range' min={0} max={1} step={0.05} onChange={(e) => {
+              const pref = {
+                ...preferences,
+                value_of_padding: e.target.value,
+              };
+              setPreferences(pref);
+              setPadding(e.target.value);
+              setData('pref', JSON.stringify(pref));
+            }} value={padding}/>
+
+            <input type='range' min={0} max={1} step={0.05} onChange={(e) => {
+              const value = e.target.value;
+              const pref = {
+                ...preferences,
+                corners: value,
+              };
+              setPreferences(pref);
+              setSmoothness(value);
+              setData('pref', JSON.stringify(pref));
+            }} value={smoothness}/>
+          </div>
+
+        </>
+      )
+    // button_is_inset: true,
+    // value_of_padding: '.5rem',
+    // corners: '.5rem',
+    case 'Storage':
+      return (
+        <>
+          <p className='placeholder'>Coming soon...</p>
+        </>
+      )
+    case 'About':
+      return (
+        <>
+          <p>This is a project of a <strong>client-side minimal editor</strong> for plain text right in your next browser tab.</p>
+          <p>You can check out the source code of the project at the <a href='https://github.com/theParitet/minimal-editor' target='_blank'>GitHub</a> repo.</p>
+          <p>If you find any bugs or want to contribute, feel free to leave an issue or create a pull request.</p>
+        </>
+      )
+  }
+}
