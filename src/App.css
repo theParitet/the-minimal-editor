@@ -14,9 +14,9 @@
     --color--warning: #eb964b;
     --color--danger: #eb4b4b;
 
-
     --color--accent--main--1: #ffbe91;
 }    
+
 @font-face {
     font-family: Rubik;
     src: url(./assets/fonts/Rubik-VariableFont_wght.ttf);

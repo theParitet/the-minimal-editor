@@ -1,5 +1,5 @@
-import download from './assets/pictures/download.svg';
-import downloadInactive from './assets/pictures/download_inactive.svg';
+import download from '../assets/pictures/download.svg';
+import downloadInactive from '../assets/pictures/download_inactive.svg';
 
 export function EditorControls({ hasChosenFile, handleExport }) {
   let className = 'btn-img';

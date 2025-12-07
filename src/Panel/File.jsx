@@ -1,5 +1,5 @@
-import file from './assets/pictures/file.svg';
-import trash from './assets/pictures/trash.svg';
+import file from '../assets/pictures/file.svg';
+import trash from '../assets/pictures/trash.svg';
 
 
 export function File({ title, isSelected, handleFileChange, handleFileDelete, preferences }) {

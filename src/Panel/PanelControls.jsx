@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import addFile from './assets/pictures/add_file.svg';
-import settings from './assets/pictures/settings.svg';
-import upload from './assets/pictures/upload.svg';
-import zen from './assets/pictures/zen.svg';
-import { Statuses } from './Statuses';
+import addFile from '../assets/pictures/add_file.svg';
+import settings from '../assets/pictures/settings.svg';
+import upload from '../assets/pictures/upload.svg';
+import zen from '../assets/pictures/zen.svg';
+import { Statuses } from '../Statuses/Statuses';
 
 export function PanelControls({ handleNewFile, handleImport, handleStatusesDelete, statuses, handleZen, handleSettings }) {
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -23,7 +23,6 @@ export function PanelControls({ handleNewFile, handleImport, handleStatusesDelet
       {!isCollapsed ? (<Statuses statuses={statuses} handleStatusesDelete={handleStatusesDelete} handleImport={handleImport} />) : ''}
 
       {/* SEARCH BUTTON HERE */}
-
 
       <div className='panel__controls__section'>
         <button className='btn-img btn-img--default' onClick={handleZen}>

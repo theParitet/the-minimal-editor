@@ -1,25 +1,16 @@
-import { useState, useContext, memo, useRef } from 'react'
-import addFolder from './assets/pictures/add_folder.svg'
-import folder from './assets/pictures/folder.svg'
-import undo from './assets/pictures/undo.svg'
-import redo from './assets/pictures/redo.svg'
-import dots from './assets/pictures/dots.svg'
-
-import cross from './assets/pictures/cross.svg';
-import file from './assets/pictures/file.svg';
-import trash from './assets/pictures/trash.svg';
+import { useState, useRef } from 'react'
+import { createPortal } from 'react-dom'
 
 import expand from './assets/pictures/expand.svg'
 import zenIcon from './assets/pictures/zen.svg';
-import search from './assets/pictures/search.svg'
 
-import Notifications from './Notifications'
 import './App.css'
-import { EditorControls } from './EditorControls'
-import { Editor } from './Editor'
-import { PanelControls } from './PanelControls'
-import { PanelFiles } from './PanelFiles'
-import { createPortal } from 'react-dom'
+import { Notifications } from './Notifications/Notifications'
+import { EditorControls } from './Editor/EditorControls'
+import { Editor } from './Editor/Editor'
+import { PanelControls } from './Panel/PanelControls'
+import { PanelFiles } from './Panel/PanelFiles'
+import { SettingsModal } from './Modal/SettingsModal';
 
 // TODO: make an actual documentation directory for these TODOs...
 // TODO: update arrow icon (24dp, eee)
@@ -364,7 +355,7 @@ export default function App() {
 
       {/* modal (settings) */}
       {inert && createPortal(
-        <Modal handleInert={() => setInert(!inert)} preferences={preferences} setPreferences={setPreferences} setData={setData}/>,
+        <SettingsModal handleInert={() => setInert(!inert)} preferences={preferences} setPreferences={setPreferences} setData={setData}/>,
         document.body
       )}
       {/* inert */}
@@ -408,157 +399,4 @@ export default function App() {
 
 function findById(arr, id) {
   return arr.find(el => el.id === id);
-}
-
-
-
-
-
-
-function Modal({handleInert, preferences, setPreferences, setData}) {
-  const [current, setCurrent] = useState(null);
-
-  const content = [
-    'Appearance',
-    'Storage',
-    'About'
-  ];
-
-  return (
-    <main id='modal-container'>
-      <div>
-
-        <button className='btn-img btn-img--default' onClick={handleInert}>
-          <img src={cross} alt='' />
-        </button>
-
-        <div className='modal'>
-          <div className='modal__options'>
-            {content.map(option => {
-              return (
-              <button className={'modal__options__option' + (current === option ? ' active' : '')}
-                onClick={() => setCurrent(option)} key={option}>
-                {option}
-              </button>
-              )
-            })}
-          </div>
-          <div className='modal__content'>
-            <h1 className='modal__content__title'>{current}</h1>
-            <SettingsContent current={current} preferences={preferences} setPreferences={setPreferences} setData={setData} />
-          </div>
-        </div>
-
-      </div>
-    </main>
-  );
-}
-
-function SettingsContent({current, preferences, setPreferences, setData}) {
-  const [padding, setPadding] = useState(preferences.value_of_padding);
-  const [smoothness, setSmoothness] = useState(preferences.corners);
-  switch (current) {
-    case null:
-      return (
-        <p className='placeholder'>Choose what you want to tinker with...</p>
-      )
-    case 'Appearance':
-      return (
-        <>
-          <p>These settings are currently applied to a portion of the elements.</p>
-
-          <h3>Preview</h3>
-          <div className='settings__options__preview'>
-            <label className='record selected'
-              style={{
-                margin: '0px auto',
-                width: '75%',
-                '--record-padding': `${preferences.value_of_padding}rem`,
-                '--border-radius' : `${preferences.corners}rem`
-              }}>
-              <button className={'record__file'}>
-                <img src={file} alt="File icon" />
-                <p className={'record__title'}>Lorem ipsum dolor</p>
-              </button>
-              <button className={'btn-img btn-img--danger record__trash' + (preferences.button_is_inset ? ' btn-inset' : '')}>
-                <img src={trash} alt="Delete a file" />
-              </button>
-            </label>
-          </div>
-
-          <h3>Button type</h3>
-          <div className='settings__options'>
-            <label className='btn-img btn-img--default btn-inset' htmlFor='btn-is-inset1'>
-              <img src={search} alt='' />
-            </label>
-            <label className='btn-img btn-img--default' htmlFor='btn-is-inset2'>
-              <img src={search} alt=''/>
-            </label>
-          </div>
-
-          <div className='settings__options'>
-            <input id='btn-is-inset1' type='radio' name='option' onChange={()=>{
-              const pref = {
-                ...preferences,
-                button_is_inset: true,
-              }
-              setPreferences(pref);
-              setData('pref', JSON.stringify(pref));
-            }} checked={preferences.button_is_inset} />
-            <input id='btn-is-inset2' type='radio' name='option' onChange={()=>{
-              const pref = {
-                ...preferences,
-                button_is_inset: false,
-              }
-              setPreferences(pref);
-              setData('pref', JSON.stringify(pref));
-            }} checked={!preferences.button_is_inset} />
-          </div>
-
-
-          <div className='settings__options grid'>
-            <h3>Padding</h3>
-            <h3>Smoothness</h3>
-            <input type='range' min={0} max={1} step={0.05} onChange={(e) => {
-              const pref = {
-                ...preferences,
-                value_of_padding: e.target.value,
-              };
-              setPreferences(pref);
-              setPadding(e.target.value);
-              setData('pref', JSON.stringify(pref));
-            }} value={padding}/>
-
-            <input type='range' min={0} max={1} step={0.05} onChange={(e) => {
-              const value = e.target.value;
-              const pref = {
-                ...preferences,
-                corners: value,
-              };
-              setPreferences(pref);
-              setSmoothness(value);
-              setData('pref', JSON.stringify(pref));
-            }} value={smoothness}/>
-          </div>
-
-        </>
-      )
-    // button_is_inset: true,
-    // value_of_padding: '.5rem',
-    // corners: '.5rem',
-    case 'Storage':
-      return (
-        <>
-          <p className='placeholder'>Coming soon...</p>
-        </>
-      )
-    case 'About':
-      return (
-        <>
-          <p>This is a project of a <strong>client-side minimal editor</strong> for plain text right in your next browser tab.</p>
-          <p>You can check out the source code of the project at the <a href='https://github.com/theParitet/minimal-editor' target='_blank'>GitHub</a> repo.</p>
-          <p>If you find any bugs or want to contribute, feel free to leave an issue or create a pull request.</p>
-        </>
-      )
-  }
 }

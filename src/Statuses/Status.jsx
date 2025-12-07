@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import arrowDown from './assets/pictures/arrow_down.svg';
-import check from './assets/pictures/check.svg';
-import cross from './assets/pictures/cross.svg';
+import arrowDown from '../assets/pictures/arrow_down.svg';
+import check from '../assets/pictures/check.svg';
+import cross from '../assets/pictures/cross.svg';
 
 
 

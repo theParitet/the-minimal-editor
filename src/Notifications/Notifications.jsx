@@ -1,7 +1,7 @@
-import cross from './assets/pictures/cross.svg';
+import cross from '../assets/pictures/cross.svg';
 
 // notification.description is used as a unique identifier
-export default function Notifications({notifications, handleDeleteNotification}) {
+export function Notifications({notifications, handleDeleteNotification}) {
 
     let repeat = [];
     const reversedNotifications = notifications.map((el, index) => {
