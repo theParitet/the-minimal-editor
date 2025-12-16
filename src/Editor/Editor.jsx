@@ -49,7 +49,7 @@ export function Editor({
     );
 }
 
-export const phrases = [
+const phrases = [
     '😈 Today I will conquer the world!',
     "I'm so excited for the upcoming holidays!",
     '📋 TODO:\n\t- Try baseball',
