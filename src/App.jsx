@@ -13,8 +13,9 @@ import { PanelFiles } from './Panel/PanelFiles';
 import { SettingsModal } from './Modal/SettingsModal';
 
 // TODO: make an actual documentation directory for these TODOs...
-// TODO: update arrow icon (24dp, eee)
 // TODO: add warning type to notifications
+// TODO: refactor notifications to use JSX instead of description
+// TODO: refactor notifications to use key notification object attribute to unique denote it
 // TODO: introduce context provider for the all of the main editor operations
 
 let importedId = 0;
@@ -284,8 +285,6 @@ export default function App() {
     };
 
     function addNotification(notification) {
-        const copy = notifications.slice();
-
         if (typeof notification === 'number') {
             switch (notification) {
                 case 0:
@@ -293,7 +292,7 @@ export default function App() {
                         type: 'danger',
                         message: 'Unable to Save Changes',
                         description:
-                            'Browser storage exceeded (5+ MB of memory). Unable to write more data. Refer to... Or revert changes...',
+                            'Browser storage exceeded (5+ MB of memory). Unable to write more data.',
                     };
                     break;
                 case 5:
@@ -301,7 +300,7 @@ export default function App() {
                         type: 'warning',
                         message: 'Storage is not Persistent',
                         description:
-                            "You are limited to the browser storage that is susceptible to erasing. To ensure your data won't be deleted, refer to...",
+                            'You are limited to the browser storage that is susceptible to erasing.',
                     };
                     break;
                 default:
@@ -314,8 +313,8 @@ export default function App() {
                     break;
             }
         }
-
-        copy.push(notification);
+        const copy = notifications.slice();
+        copy.unshift(notification);
         setNotifications(copy);
     }
 
@@ -333,7 +332,7 @@ export default function App() {
             localStorage.setItem(key, data);
             return true;
         } catch (e) {
-            addNotification(e.name === 'QuotaExceededError' ? failMessage : 1);
+            addNotification(e.name === 'QuotaExceededError' ? failMessage : 0);
             if (throwError) {
                 throw new Error(e.name);
             }

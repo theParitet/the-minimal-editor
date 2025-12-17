@@ -3,14 +3,8 @@ import cross from '../assets/pictures/cross.svg';
 // notification.description is used as a unique identifier
 export function Notifications({ notifications, handleDeleteNotification }) {
     let repeat = [];
-    const reversedNotifications = notifications.map((el, index) => {
-        const newIndex = notifications.length - 1 - index;
-        return notifications[newIndex];
-    });
 
-    console.log('given:', notifications, '\nreversed:', reversedNotifications);
-
-    reversedNotifications.forEach(ntf => {
+    notifications.forEach(ntf => {
         const descriptions = repeat.map(r => r.description);
         if (!descriptions.includes(ntf.description)) {
             repeat.push({
