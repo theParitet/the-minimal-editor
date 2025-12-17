@@ -8,7 +8,7 @@ export function SettingsModal({
     setPreferences,
     setData,
 }) {
-    const [current, setCurrent] = useState(null);
+    const [current, setCurrent] = useState('About');
 
     const content = ['Appearance', 'Storage', 'About'];
 
