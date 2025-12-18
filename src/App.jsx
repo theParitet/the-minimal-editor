@@ -12,7 +12,6 @@ import { PanelControls } from './Panel/PanelControls';
 import { PanelFiles } from './Panel/PanelFiles';
 import { SettingsModal } from './Modal/SettingsModal';
 
-// TODO: make an actual documentation directory for these TODOs...
 // TODO: introduce context provider for the all of the main editor operations
 
 let importedId = 0;
@@ -65,9 +64,9 @@ if (!data) {
 let pref = JSON.parse(localStorage.getItem('pref'));
 if (!pref) {
     pref = {
-        button_is_inset: false,
-        value_of_padding: 0.5, //rem
-        corners: 0.5, //rem
+        inset: false,
+        space: 0.5, //rem
+        smoothness: 0.5, //rem
     };
 }
 
@@ -414,8 +413,7 @@ export default function App() {
             <main
                 id="manager"
                 className={
-                    (!zen ? '' : ' zen') +
-                    (preferences.button_is_inset ? ' inset' : '')
+                    (!zen ? '' : ' zen') + (preferences.inset ? ' inset' : '')
                 }
                 inert={inert}
             >

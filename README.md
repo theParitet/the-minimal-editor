@@ -27,7 +27,7 @@ The Minimal Editor is a web plain text editor.
 - Implement `StorageManager` browser API to allow persistence with the local machine and allow approximation of taken space.
 - Explore the possibility of making the application to be PWA with Service Workers
 - Searching and sorting
-- Appearance Themes
+- Extended Theming (modern, neumorphism, glass; accent colors)
 - Proper file structure (with directories)
 - Add automatic title option based on content
 - Verbose file panel (with partial content display)

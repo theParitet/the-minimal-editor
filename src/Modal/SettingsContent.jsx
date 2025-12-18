@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import file from '../assets/pictures/file.svg';
 import search from '../assets/pictures/search.svg';
 import trash from '../assets/pictures/trash.svg';
@@ -9,8 +8,6 @@ export function SettingsContent({
     setPreferences,
     setData,
 }) {
-    const [padding, setPadding] = useState(preferences.value_of_padding);
-    const [smoothness, setSmoothness] = useState(preferences.corners);
     switch (current) {
         case null:
             return (
@@ -26,37 +23,7 @@ export function SettingsContent({
                         elements.
                     </p>
 
-                    <h3>Preview</h3>
-                    <div className="settings__options__preview">
-                        <label
-                            className="record selected"
-                            style={{
-                                margin: '0px auto',
-                                width: '75%',
-                                '--record-padding': `${preferences.value_of_padding}rem`,
-                                '--border-radius': `${preferences.corners}rem`,
-                            }}
-                        >
-                            <button className={'record__file'}>
-                                <img src={file} alt="File icon" />
-                                <p className={'record__title'}>
-                                    Lorem ipsum dolor
-                                </p>
-                            </button>
-                            <button
-                                className={
-                                    'btn-img btn-img--danger record__trash' +
-                                    (preferences.button_is_inset
-                                        ? ' btn-inset'
-                                        : '')
-                                }
-                            >
-                                <img src={trash} alt="Delete a file" />
-                            </button>
-                        </label>
-                    </div>
-
-                    <h3>Button type</h3>
+                    <h3>Theme</h3>
                     <div className="settings__options">
                         <label
                             className="btn-img btn-img--default btn-inset"
@@ -80,12 +47,12 @@ export function SettingsContent({
                             onChange={() => {
                                 const pref = {
                                     ...preferences,
-                                    button_is_inset: true,
+                                    inset: true,
                                 };
                                 setPreferences(pref);
                                 setData('pref', JSON.stringify(pref));
                             }}
-                            checked={preferences.button_is_inset}
+                            checked={preferences.inset}
                         />
                         <input
                             id="btn-is-inset2"
@@ -94,12 +61,12 @@ export function SettingsContent({
                             onChange={() => {
                                 const pref = {
                                     ...preferences,
-                                    button_is_inset: false,
+                                    inset: false,
                                 };
                                 setPreferences(pref);
                                 setData('pref', JSON.stringify(pref));
                             }}
-                            checked={!preferences.button_is_inset}
+                            checked={!preferences.inset}
                         />
                     </div>
 
@@ -114,13 +81,12 @@ export function SettingsContent({
                             onChange={e => {
                                 const pref = {
                                     ...preferences,
-                                    value_of_padding: e.target.value,
+                                    space: e.target.value,
                                 };
                                 setPreferences(pref);
-                                setPadding(e.target.value);
                                 setData('pref', JSON.stringify(pref));
                             }}
-                            value={padding}
+                            value={preferences.space}
                         />
 
                         <input
@@ -132,20 +98,70 @@ export function SettingsContent({
                                 const value = e.target.value;
                                 const pref = {
                                     ...preferences,
-                                    corners: value,
+                                    smoothness: value,
                                 };
                                 setPreferences(pref);
-                                setSmoothness(value);
                                 setData('pref', JSON.stringify(pref));
                             }}
-                            value={smoothness}
+                            value={preferences.smoothness}
                         />
+                    </div>
+
+                    <h3>Preview</h3>
+                    <div
+                        className={
+                            'settings__options__preview ' +
+                            (preferences.inset ? 'inset' : '')
+                        }
+                        style={{
+                            display: 'block',
+                            flexShrink: '0',
+                        }}
+                    >
+                        <label
+                            className="record"
+                            style={{
+                                margin: '0px auto',
+                                width: '75%',
+                                '--record-padding': `${preferences.space}rem`,
+                                '--border-radius': `${preferences.smoothness}rem`,
+                            }}
+                        >
+                            <button className="record__file">
+                                <img src={file} alt="File icon" />
+                                <p className={'record__title'}>
+                                    Lorem ipsum dolor
+                                </p>
+                            </button>
+                            <button className="btn-img btn-img--danger record__trash">
+                                <img src={trash} alt="Delete a file" />
+                            </button>
+                        </label>
+                        <label
+                            className="record selected"
+                            style={{
+                                margin: '0px auto',
+                                width: '75%',
+                                '--record-padding': `${preferences.space}rem`,
+                                '--border-radius': `${preferences.smoothness}rem`,
+                            }}
+                        >
+                            <button className="record__file">
+                                <img src={file} alt="File icon" />
+                                <p className={'record__title'}>
+                                    Lorem ipsum dolor
+                                </p>
+                            </button>
+                            <button className="btn-img btn-img--danger record__trash">
+                                <img src={trash} alt="Delete a file" />
+                            </button>
+                        </label>
                     </div>
                 </>
             );
-        // button_is_inset: true,
-        // value_of_padding: '.5rem',
-        // corners: '.5rem',
+        // inset: true,
+        // space: '.5rem',
+        // smoothness: '.5rem',
         case 'Storage':
             return (
                 <>
@@ -163,7 +179,7 @@ export function SettingsContent({
                     <p>
                         You can check out the source code of the project at the{' '}
                         <a
-                            href="https://github.com/theParitet/minimal-editor"
+                            href="https://github.com/theParitet/the-minimal-editor-js"
                             target="_blank"
                         >
                             GitHub

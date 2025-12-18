@@ -15,8 +15,8 @@ export function File({
         <div
             className={classNameRecord}
             style={{
-                '--record-padding': `${preferences.value_of_padding}rem`,
-                '--border-radius': `${preferences.corners}rem`,
+                '--record-padding': `${preferences.space}rem`,
+                '--border-radius': `${preferences.smoothness}rem`,
             }}
         >
             <button className={'record__file'} onClick={handleFileChange}>

@@ -275,7 +275,7 @@ strong {
     background-color: #444;
 }
 
-#manager.inset {
+.inset {
     .btn-zen {
         box-shadow:
             0 0 0.2rem #444,
@@ -285,6 +285,40 @@ strong {
         box-shadow:
             0 0 0.2rem #eeeeee44,
             inset 0 0 0.2rem black;
+    }
+    .record.selected {
+        background-color: transparent;
+    }
+    .record:focus,
+    .record:hover {
+        /* border-radius: 0 var(--border-radius) var(--border-radius) 0; */
+        box-shadow:
+            inset 0 0 0.5rem #eeeeee22,
+            0 0 0.5rem #11111188;
+    }
+    .record:not(.selected):has(
+            :is(
+                .record__trash:focus,
+                .record__trash:hover,
+                .record__trash.active
+            )
+        ) {
+        box-shadow: none;
+    }
+    .record.selected {
+        border-radius: var(--border-radius);
+        background-color: #b0e0e633;
+        box-shadow:
+            0 0 0.2rem #eeeeee44,
+            inset 0 0 0.2rem black;
+    }
+    .record.selected {
+        .record__trash {
+            box-shadow:
+                inset 0 0 0.2rem #eeeeee44,
+                0 0 0.2rem #000000ee;
+            backdrop-filter: brightness(90%);
+        }
     }
     .btn-img.arrow {
         box-shadow: none;
