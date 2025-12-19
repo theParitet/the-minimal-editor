@@ -12,7 +12,7 @@ export function Editor({
     useEffect(() => {
         placeholder.current =
             phrases[Math.floor(Math.random() * phrases.length)];
-    }, [file.id]);
+    }, [file?.id]);
 
     const noFileIsSelected = file ? false : true;
     const isDisabled = !isPanelCollapsed;
