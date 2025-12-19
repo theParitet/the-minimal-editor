@@ -18,34 +18,26 @@ const version = 'v0.1.1';
 
 const readmeTitle = `⚙️ Your Minimal Editor ${version}`;
 const readmeContent = `[info]
-Quick info:
-This is a plain text editor. No links, no formatting, no images.
+This is a web-based plain text editor right in your browser. No links, no formatting, no images, no distraction.
 
-The files are stored in your the browser memory (local storage). Local storage is able to hold about 5-10 MB of memory, which is enough to write a few decently-sized novels.
-
-This is just the first implementation of a minimal editor that I decided to make when exploring React. Dipping my toes into the water, one may say.
+This is just the _first_ implementation of a minimal editor.
 
 [features]
-Main features:
-- Add & Delete files
-- Files have a title and content
-- Import and export text files
-- Data is preserved with local storage
+- Create, edit and delete text files
+- Import and export the files
+- Embrace zen mode for focused writing
+- Data is preserved with the browser local storage (5-10 megabytes of memory)
+- Configure the appearance to your liking in the settings
 - ... More to come!
 
-Additionally, the editor is being tested to work well across different devices and browsers.
-
 [aspirations]
-In future iterations of this editor, IndexedDB would be used instead, which allows significantly more space (exact size may vary) and is not blocking, making the saving operations asynchronous (unlike local storage).
-
-StorageManager API would be later leveraged to ensure better client-side UX. PWA is also an option to explore, due to potential offline support.
-
-Other features would be added to enhance this editor further.
+The editor will be continuously improved. It will:
+- become more performant and reliable by using asynchronous and persistent storage
+- have better UX by offering searching and sorting, smart titles, extended file structure and better customization
+- offer offline functionality
 
 [more]
-If you wish to learn more, you can find additional information on GitHub:
-https://github.com/theParitet/the-minimal-editor-js
-(direct hyperlink link can be found in Settings (gear icon) > About)`;
+If you wish to learn more, you can find additional information on GitHub by following the link in the header or About section of the settings.`;
 const readme = {
     id: -1,
     title: readmeTitle,
@@ -61,7 +53,8 @@ let pref = JSON.parse(localStorage.getItem('pref'));
 if (!pref) {
     pref = {
         inset: false,
-        space: 0.5,
+        space: 0.25,
+        smoothness: 0.5,
     };
 }
 
@@ -370,6 +363,17 @@ export default function App() {
                 <button className="header__btn" onClick={handleAddReadme}>
                     Learn more
                 </button>
+                <a
+                    className="btn-img btn-img--default"
+                    href="https://github.com/theParitet/the-minimal-editor-js"
+                    target="_blank"
+                    style={{
+                        position: 'absolute',
+                        right: '.3rem',
+                    }}
+                >
+                    <img width={24} src="public/github-mark-white.svg" />
+                </a>
             </header>
 
             {inert &&
