@@ -12,12 +12,9 @@ import { PanelControls } from './Panel/PanelControls';
 import { PanelFiles } from './Panel/PanelFiles';
 import { SettingsModal } from './Modal/SettingsModal';
 
-// TODO: introduce context provider for the all of the main editor operations
-
 let importedId = 0;
 
-const version = 'v0.1.0'; // could be used later to ensure compatibility with outdated json of the saves
-// localStorage.setItem('v', ... );
+const version = 'v0.1.1';
 
 const readmeTitle = `⚙️ Your Minimal Editor ${version}`;
 const readmeContent = `[info]
@@ -55,7 +52,6 @@ const readme = {
     content: readmeContent,
 };
 
-// initialization
 let data = JSON.parse(localStorage.getItem('saves'));
 if (!data) {
     data = [readme];
@@ -65,8 +61,7 @@ let pref = JSON.parse(localStorage.getItem('pref'));
 if (!pref) {
     pref = {
         inset: false,
-        space: 0.5, //rem
-        smoothness: 0.5, //rem
+        space: 0.5,
     };
 }
 
@@ -79,8 +74,8 @@ if (lastItem || lastItem === 0) {
 }
 
 export default function App() {
-    const [fileId, setFileId] = useState(id); // should use local storage to check last saves
-    const [saves, setSaves] = useState(data); // should set the state based on the local storage
+    const [fileId, setFileId] = useState(id);
+    const [saves, setSaves] = useState(data);
     const [statuses, setStatuses] = useState([]);
     const [isPanelCollapsed, setIsPanelCollapsed] = useState(true);
 
@@ -206,11 +201,9 @@ export default function App() {
 
     const handleImport = async e => {
         const initFiles = e.target.files;
-        // const newFiles = [];
         const fileData = []; //title + error (if any)
 
         const tempSaves = saves.slice();
-        // trying to push every new file
         for (const file of initFiles) {
             let title = file.name;
 
@@ -284,7 +277,7 @@ export default function App() {
 
         const fileName = currentFile.title;
 
-        const fileExtensionRegex = /(\.[a-zA-Z]{1,5})$/g; // probably close
+        const fileExtensionRegex = /(\.[a-zA-Z]{1,5})$/g;
         const isLegitFileExtension = fileExtensionRegex.test(fileName);
         const extension = isLegitFileExtension ? '' : '.txt';
         const exportedFileName = fileName
@@ -374,8 +367,6 @@ export default function App() {
         }
     }
 
-    console.log('RERENDER<<<<<<<<<<<<<<<<<<');
-
     return (
         <>
             <header className="header" inert={inert}>
@@ -388,7 +379,6 @@ export default function App() {
                 </button>
             </header>
 
-            {/* modal (settings) */}
             {inert &&
                 createPortal(
                     <SettingsModal
@@ -399,7 +389,6 @@ export default function App() {
                     />,
                     document.body
                 )}
-            {/* inert */}
 
             {notifications.length !== 0 && (
                 <Notifications
@@ -408,7 +397,6 @@ export default function App() {
                     inert={inert}
                 />
             )}
-            {/* notifications (managing overflow) */}
 
             <main
                 id="manager"

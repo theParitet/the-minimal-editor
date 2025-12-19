@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+
 export function Editor({
     handleContentChange,
     handleTitleChange,
@@ -6,7 +8,12 @@ export function Editor({
     file,
     isPanelCollapsed,
 }) {
-    const placeholder = phrases[Math.floor(Math.random() * phrases.length)];
+    const placeholder = useRef('');
+    useEffect(() => {
+        placeholder.current =
+            phrases[Math.floor(Math.random() * phrases.length)];
+    }, [file.id]);
+
     const noFileIsSelected = file ? false : true;
     const isDisabled = !isPanelCollapsed;
 
@@ -40,7 +47,7 @@ export function Editor({
                 className={noFileIsSelected ? 'editor disabled' : 'editor'}
                 onChange={handleContentChange}
                 spellCheck={true}
-                placeholder={placeholder}
+                placeholder={placeholder.current}
                 disabled={noFileIsSelected || isDisabled}
                 value={noFileIsSelected ? ' ' : file?.content || ''}
                 ref={contentRef}
