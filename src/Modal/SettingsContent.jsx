@@ -50,7 +50,7 @@ export function SettingsContent({
                                     inset: true,
                                 };
                                 setPreferences(pref);
-                                setData('pref', JSON.stringify(pref));
+                                setData('pref', pref);
                             }}
                             checked={preferences.inset}
                         />
@@ -64,7 +64,7 @@ export function SettingsContent({
                                     inset: false,
                                 };
                                 setPreferences(pref);
-                                setData('pref', JSON.stringify(pref));
+                                setData('pref', pref);
                             }}
                             checked={!preferences.inset}
                         />
@@ -84,7 +84,7 @@ export function SettingsContent({
                                     space: e.target.value,
                                 };
                                 setPreferences(pref);
-                                setData('pref', JSON.stringify(pref));
+                                setData('pref', pref);
                             }}
                             value={preferences.space}
                         />
@@ -101,7 +101,7 @@ export function SettingsContent({
                                     smoothness: value,
                                 };
                                 setPreferences(pref);
-                                setData('pref', JSON.stringify(pref));
+                                setData('pref', pref);
                             }}
                             value={preferences.smoothness}
                         />

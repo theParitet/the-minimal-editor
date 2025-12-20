@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
 import expand from './assets/pictures/expand.svg';
@@ -13,75 +13,62 @@ import { PanelControls } from './Panel/PanelControls';
 import { PanelFiles } from './Panel/PanelFiles';
 import { SettingsModal } from './Modal/SettingsModal';
 
-let importedId = 0;
+import {
+    File,
+    FileImportData,
+    ImportStatus,
+    Notification,
+    Preferences,
+} from './types';
+import { PREDEFINED_NOTIFICATIONS, Readme } from './constants';
 
-const version = 'v0.1.2';
+let importedId: number = 0;
 
-const readmeTitle = `⚙️ Your Minimal Editor ${version}`;
-const readmeContent = `[info]
-This is a web-based plain text editor right in your browser. No links, no formatting, no images, no distraction.
-
-This is just the _first_ implementation of a minimal editor.
-
-[features]
-- Create, edit and delete text files
-- Import and export the files
-- Embrace zen mode for focused writing
-- Data is preserved with the browser local storage (5-10 megabytes of memory)
-- Configure the appearance to your liking in the settings
-- ... More to come!
-
-[aspirations]
-The editor will be continuously improved. It will:
-- become more performant and reliable by using asynchronous and persistent storage
-- have better UX by offering searching and sorting, smart titles, extended file structure and better customization
-- offer offline functionality
-
-[more]
-If you wish to learn more, you can find additional information on GitHub by following the link in the header or About section of the settings.`;
-const readme = {
-    id: -1,
-    title: readmeTitle,
-    content: readmeContent,
-};
-
-let data = JSON.parse(localStorage.getItem('saves'));
-if (!data) {
-    data = [readme];
+let data: File[];
+const savedData = localStorage.getItem('saves');
+if (!savedData) {
+    data = [Readme];
+} else {
+    data = JSON.parse(savedData);
 }
 
-let pref = JSON.parse(localStorage.getItem('pref'));
-if (!pref) {
+let pref: Preferences;
+const savedPref = localStorage.getItem('pref');
+if (!savedPref) {
     pref = {
         inset: false,
         space: 0.25,
         smoothness: 0.5,
     };
+} else {
+    pref = JSON.parse(savedPref);
 }
 
-let id;
-const lastItem = parseInt(localStorage.getItem('last'));
+let id: number;
+const lastItem = localStorage.getItem('last');
 
-if (lastItem || lastItem === 0) {
-    id = lastItem;
+if (lastItem) {
+    id = parseInt(lastItem);
 }
 
 export default function App() {
-    const [fileId, setFileId] = useState(id);
-    const [saves, setSaves] = useState(data);
-    const [statuses, setStatuses] = useState([]);
-    const [isPanelCollapsed, setIsPanelCollapsed] = useState(true);
+    const [fileId, setFileId] = useState<number | null>(id);
+    const [saves, setSaves] = useState<File[]>(data);
+    const [statuses, setStatuses] = useState<ImportStatus[]>([]);
+    const [isPanelCollapsed, setIsPanelCollapsed] = useState<boolean>(true);
 
-    const [notifications, setNotifications] = useState([]);
+    const [notifications, setNotifications] = useState<Notification[]>([]);
 
-    const [preferences, setPreferences] = useState(pref);
+    const [preferences, setPreferences] = useState<Preferences>(pref);
     const [inert, setInert] = useState(false);
     const [zen, setZen] = useState(false);
 
-    const titleRef = useRef(null);
-    const contentRef = useRef(null);
+    const titleRef = useRef<HTMLInputElement>(null);
+    const contentRef = useRef<HTMLTextAreaElement>(null);
 
-    const currentFile = findById(saves, fileId);
+    const currentFile: File | undefined = saves.find(
+        save => save.id === fileId
+    );
 
     function getNextId(givenSaves = saves) {
         let lastId = 0;
@@ -109,14 +96,14 @@ export default function App() {
         setSaves(copy);
         setFileId(nextId);
         setTimeout(() => {
-            titleRef.current.focus();
+            titleRef.current?.focus();
         }, 1);
 
-        setData('saves', JSON.stringify(copy));
+        setData('saves', copy);
         setData('last', nextId);
     };
 
-    const handleContentChange = e => {
+    const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         if (fileId || fileId === 0) {
             const modifiedSaves = saves.map(save => {
                 if (save.id !== fileId) {
@@ -130,11 +117,11 @@ export default function App() {
                 }
             });
             setSaves(modifiedSaves);
-            setData('saves', JSON.stringify(modifiedSaves));
+            setData('saves', modifiedSaves);
         }
     };
 
-    const handleTitleChange = e => {
+    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (fileId || fileId === 0) {
             let title = e.target.value;
 
@@ -150,28 +137,28 @@ export default function App() {
             });
 
             setSaves(modifiedSaves);
-            setData('saves', JSON.stringify(modifiedSaves));
+            setData('saves', modifiedSaves);
         }
     };
 
     const handleAddReadme = () => {
-        if (!findById(saves, -1)) {
+        if (saves.find(save => save.id === -1)) {
             const copy = saves.slice();
-            copy.push(readme);
+            copy.push(Readme);
             setSaves(copy);
-            setData('saves', JSON.stringify(copy));
+            setData('saves', copy);
         }
         setFileId(-1);
         setData('last', -1);
     };
 
-    function changeFile(id) {
+    function changeFile(id: number) {
         setFileId(id);
         setData('last', id);
         setIsPanelCollapsed(true);
     }
 
-    function deleteFile(id) {
+    function deleteFile(id: number) {
         if (id === fileId) {
             setFileId(null);
             setData('last', null);
@@ -179,16 +166,17 @@ export default function App() {
 
         const modifiedSaves = saves.filter(save => save.id !== id);
         setSaves(modifiedSaves);
-        setData('saves', JSON.stringify(modifiedSaves));
+        setData('saves', modifiedSaves);
     }
 
     const handleStatusesDelete = () => {
         setStatuses([]);
     };
 
-    const handleImport = async e => {
+    const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const initFiles = e.target.files;
-        const fileData = []; //title + error (if any)
+        if (initFiles === null) return;
+        const fileData: FileImportData[] = []; //title + error (if any)
 
         const tempSaves = saves.slice();
         for (const file of initFiles) {
@@ -206,10 +194,8 @@ export default function App() {
 
                 tempSaves.push(fileObj);
 
-                setData(
-                    'saves',
-                    JSON.stringify(tempSaves),
-                    {
+                setData('saves', tempSaves, {
+                    notification: {
                         key: `FILELOAD::FAIL::${title}`,
                         type: 'danger',
                         title: 'Unable to Load File',
@@ -225,9 +211,9 @@ export default function App() {
                             </p>
                         ),
                     },
-                    true
-                );
-                setData('last', nextId, 0, true);
+                    throwError: true,
+                });
+                setData('last', nextId, { throwError: true });
                 setFileId(nextId);
 
                 fileData.push({
@@ -235,13 +221,15 @@ export default function App() {
                     error: '',
                 });
             } catch (err) {
-                tempSaves.pop();
+                if (err instanceof Error) {
+                    tempSaves.pop();
 
-                console.error(err);
-                fileData.push({
-                    title: title,
-                    error: err.message,
-                });
+                    console.error(err);
+                    fileData.push({
+                        title: title,
+                        error: err.message,
+                    });
+                }
             }
         }
 
@@ -253,10 +241,11 @@ export default function App() {
         setStatuses(copy);
 
         setSaves(tempSaves);
-        setData('saves', JSON.stringify(tempSaves));
+        setData('saves', tempSaves);
     };
 
     const handleExport = () => {
+        if (currentFile === undefined) return;
         const blob = new Blob([currentFile.content], { type: 'text/*' });
 
         const link = document.createElement('a');
@@ -280,75 +269,36 @@ export default function App() {
         URL.revokeObjectURL(link.href);
     };
 
-    function addNotification(notification) {
-        if (typeof notification === 'number') {
-            let numKey = notification;
-            switch (notification) {
-                case 0:
-                    notification = {
-                        type: 'danger',
-                        title: 'Unable to Save Changes',
-                        description:
-                            'Browser storage exceeded (more than 5MB of memory). Unable to write more data.',
-                    };
-                    break;
-                case 5:
-                    notification = {
-                        type: 'warning',
-                        title: 'Storage is not Persistent',
-                        description:
-                            'You are limited to the browser storage that is susceptible to erasing.',
-                    };
-                    break;
-                case 7:
-                    notification = {
-                        type: 'info',
-                        title: 'Test Info',
-                        description: (
-                            <p className="notification__description">
-                                This is a test info message.
-                            </p>
-                        ),
-                    };
-                    break;
-                default:
-                    notification = {
-                        type: 'danger',
-                        title: 'Unknown Error',
-                        description: (
-                            <p className="notification__description">
-                                Unknown error. If being continuously
-                                encountered,{' '}
-                                <a
-                                    href="https://github.com/theParitet/the-minimal-editor/issues"
-                                    target="_blank"
-                                >
-                                    submit an issue
-                                </a>{' '}
-                                on GitHub.
-                            </p>
-                        ),
-                    };
-                    break;
-            }
-            notification.key = `PREDEFINED::${numKey}`;
-        }
+    function addNotification(notification: Notification) {
         setNotifications(prev => [notification, ...prev]);
     }
 
-    const handleDeleteNotification = key => {
+    const handleDeleteNotification = (key: string) => {
         const copy = notifications.slice();
         setNotifications(copy.filter(notification => notification.key !== key));
     };
 
-    function setData(key, data, notification = 0, throwError = false) {
+    function setData(
+        key: 'saves' | 'last' | 'pref',
+        data: object | string | number | null,
+        options?: {
+            notification?: Notification;
+            throwError?: boolean;
+        }
+    ): boolean {
+        const {
+            notification = PREDEFINED_NOTIFICATIONS.STORAGE_EXCEEDED,
+            throwError = false,
+        } = options || {};
         try {
-            localStorage.setItem(key, data);
+            localStorage.setItem(key, JSON.stringify(data));
             return true;
         } catch (e) {
-            addNotification(notification);
-            if (throwError) {
-                throw new Error(e.name);
+            if (e instanceof Error) {
+                addNotification(notification);
+                if (throwError) {
+                    throw new Error(e.name);
+                }
             }
             return false;
         }
@@ -471,8 +421,4 @@ export default function App() {
             </main>
         </>
     );
-}
-
-function findById(arr, id) {
-    return arr.find(el => el.id === id);
 }

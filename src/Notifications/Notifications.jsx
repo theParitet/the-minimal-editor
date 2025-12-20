@@ -1,6 +1,10 @@
 import cross from '../assets/pictures/cross.svg';
 
-export function Notifications({ notifications, handleDeleteNotification }) {
+export function Notifications({
+    notifications,
+    handleDeleteNotification,
+    inert,
+}) {
     const repeat = [];
     const keys = [];
 
@@ -52,5 +56,9 @@ export function Notifications({ notifications, handleDeleteNotification }) {
         );
     });
 
-    return <div className="notification-container">{notificationsJSX}</div>;
+    return (
+        <div inert={inert} className="notification-container">
+            {notificationsJSX}
+        </div>
+    );
 }
