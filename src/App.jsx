@@ -15,7 +15,7 @@ import { SettingsModal } from './Modal/SettingsModal';
 
 let importedId = 0;
 
-const version = 'v0.1.1';
+const version = 'v0.1.2';
 
 const readmeTitle = `⚙️ Your Minimal Editor ${version}`;
 const readmeContent = `[info]
