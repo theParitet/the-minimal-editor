@@ -4,6 +4,7 @@ import settings from '../assets/pictures/settings.svg';
 import upload from '../assets/pictures/upload.svg';
 import zen from '../assets/pictures/zen.svg';
 import { Statuses } from '../Statuses/Statuses';
+import { ImportStatus } from '../types';
 
 export function PanelControls({
     handleNewFile,
@@ -12,6 +13,13 @@ export function PanelControls({
     statuses,
     handleZen,
     handleSettings,
+}: {
+    handleNewFile: () => void;
+    handleImport: React.ChangeEventHandler<HTMLInputElement>;
+    handleStatusesDelete: () => void;
+    statuses: ImportStatus[];
+    handleZen: () => void;
+    handleSettings: () => void;
 }) {
     const [isCollapsed, setIsCollapsed] = useState(true);
     const handleCollapsed = () => setIsCollapsed(!isCollapsed);

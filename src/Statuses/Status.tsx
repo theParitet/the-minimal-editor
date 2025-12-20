@@ -2,8 +2,9 @@ import { useState } from 'react';
 import arrowDown from '../assets/pictures/arrow_down.svg';
 import check from '../assets/pictures/check.svg';
 import cross from '../assets/pictures/cross.svg';
+import { FileImportData } from '../types';
 
-export function Status({ fileData }) {
+export function Status({ fileData }: { fileData: FileImportData[] }) {
     // each object in filedata array has 'title' and 'error'
     const [isCollapsed, setIsCollapsed] = useState(true);
 

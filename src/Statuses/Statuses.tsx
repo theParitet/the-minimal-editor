@@ -1,6 +1,15 @@
+import { ImportStatus } from '../types';
 import { Status } from './Status';
 
-export function Statuses({ statuses, handleImport, handleStatusesDelete }) {
+export function Statuses({
+    statuses,
+    handleImport,
+    handleStatusesDelete,
+}: {
+    handleImport: React.ChangeEventHandler<HTMLInputElement>;
+    handleStatusesDelete: () => void;
+    statuses: ImportStatus[];
+}) {
     const StatusesJSX = statuses.map(status => {
         return <Status fileData={status.files} key={status.id} />;
     });
