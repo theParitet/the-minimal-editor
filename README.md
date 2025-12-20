@@ -6,7 +6,7 @@
 
 The Minimal Editor is a web-based plain text editor designed for simplicity and focus. It runs entirely in your browser and uses local storage to save your work.
 
-> [Live demo](https://theparitet.github.io/the-minimal-editor-js/)
+> [Live demo](https://theparitet.github.io/the-minimal-editor/)
 
 ## Features
 
@@ -34,8 +34,8 @@ The list of operations to edit, run and preview the project locally:
 1.  **Clone the repository** (through SSH in this case)
 
     ```bash
-    git clone git@github.com:theParitet/the-minimal-editor-js.git
-    cd the-minimal-editor-js
+    git clone git@github.com:theParitet/the-minimal-editor.git
+    cd the-minimal-editor
     ```
 
 2.  **Install dependencies**

@@ -187,7 +187,7 @@ export function SettingsContent({
                         You can check out the source code and contribute to the
                         project at the{' '}
                         <a
-                            href="https://github.com/theParitet/the-minimal-editor-js"
+                            href="https://github.com/theParitet/the-minimal-editor"
                             target="_blank"
                         >
                             GitHub

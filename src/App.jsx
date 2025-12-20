@@ -320,7 +320,7 @@ export default function App() {
                                 Unknown error. If being continuously
                                 encountered,{' '}
                                 <a
-                                    href="https://github.com/theParitet/the-minimal-editor-js/issues"
+                                    href="https://github.com/theParitet/the-minimal-editor/issues"
                                     target="_blank"
                                 >
                                     submit an issue
@@ -366,7 +366,7 @@ export default function App() {
                 </button>
                 <a
                     className="btn-img btn-img--default"
-                    href="https://github.com/theParitet/the-minimal-editor-js"
+                    href="https://github.com/theParitet/the-minimal-editor"
                     target="_blank"
                     style={{
                         position: 'absolute',
