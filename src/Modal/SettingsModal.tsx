@@ -1,16 +1,25 @@
 import { useState } from 'react';
-import { SettingsContent } from './SettingsContent';
+import { SettingsContent } from './SettingsMenu';
 import cross from '../assets/pictures/cross.svg';
+import {
+    Preferences,
+    SetDataFunction,
+    SettingsMenuType,
+    SettingsMenuTypes,
+} from '../types';
 
 export function SettingsModal({
     handleInert,
     preferences,
     setPreferences,
     setData,
+}: {
+    handleInert: () => void;
+    preferences: Preferences;
+    setPreferences: React.Dispatch<React.SetStateAction<Preferences>>;
+    setData: SetDataFunction;
 }) {
-    const [current, setCurrent] = useState('About');
-
-    const content = ['Appearance', 'Storage', 'About'];
+    const [current, setCurrent] = useState<SettingsMenuType>('About');
 
     return (
         <main id="modal-container">
@@ -24,7 +33,7 @@ export function SettingsModal({
 
                 <div className="modal">
                     <div className="modal__options">
-                        {content.map(option => {
+                        {SettingsMenuTypes.map(option => {
                             return (
                                 <button
                                     className={

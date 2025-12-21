@@ -1,12 +1,19 @@
 import file from '../assets/pictures/file.svg';
 import search from '../assets/pictures/search.svg';
 import trash from '../assets/pictures/trash.svg';
+import { Preferences, SetDataFunction, SettingsMenuType } from '../types';
+import { CSSProperties } from 'react';
 
 export function SettingsContent({
     current,
     preferences,
     setPreferences,
     setData,
+}: {
+    current: SettingsMenuType;
+    preferences: Preferences;
+    setPreferences: React.Dispatch<React.SetStateAction<Preferences>>;
+    setData: SetDataFunction;
 }) {
     switch (current) {
         case null:
@@ -50,7 +57,7 @@ export function SettingsContent({
                                     inset: true,
                                 };
                                 setPreferences(pref);
-                                setData('pref', pref);
+                                setData('USER_PREFERENCES', pref);
                             }}
                             checked={preferences.inset}
                         />
@@ -64,7 +71,7 @@ export function SettingsContent({
                                     inset: false,
                                 };
                                 setPreferences(pref);
-                                setData('pref', pref);
+                                setData('USER_PREFERENCES', pref);
                             }}
                             checked={!preferences.inset}
                         />
@@ -79,12 +86,13 @@ export function SettingsContent({
                             max={1}
                             step={0.05}
                             onChange={e => {
-                                const pref = {
+                                const pref: Preferences = {
                                     ...preferences,
-                                    space: e.target.value,
+                                    space: parseFloat(e.target.value),
                                 };
+
                                 setPreferences(pref);
-                                setData('pref', pref);
+                                setData('USER_PREFERENCES', pref);
                             }}
                             value={preferences.space}
                         />
@@ -96,12 +104,12 @@ export function SettingsContent({
                             step={0.05}
                             onChange={e => {
                                 const value = e.target.value;
-                                const pref = {
+                                const pref: Preferences = {
                                     ...preferences,
-                                    smoothness: value,
+                                    smoothness: parseFloat(value),
                                 };
                                 setPreferences(pref);
-                                setData('pref', pref);
+                                setData('USER_PREFERENCES', pref);
                             }}
                             value={preferences.smoothness}
                         />
@@ -120,12 +128,14 @@ export function SettingsContent({
                     >
                         <label
                             className="record"
-                            style={{
-                                margin: '0px auto',
-                                width: '75%',
-                                '--record-padding': `${preferences.space}rem`,
-                                '--border-radius': `${preferences.smoothness}rem`,
-                            }}
+                            style={
+                                {
+                                    margin: '0px auto',
+                                    width: '75%',
+                                    '--record-padding': `${preferences.space}rem`,
+                                    '--border-radius': `${preferences.smoothness}rem`,
+                                } as CSSProperties
+                            }
                         >
                             <button className="record__file">
                                 <img src={file} alt="File icon" />
@@ -144,12 +154,14 @@ export function SettingsContent({
                         </label>
                         <label
                             className="record selected"
-                            style={{
-                                margin: '0px auto',
-                                width: '75%',
-                                '--record-padding': `${preferences.space}rem`,
-                                '--border-radius': `${preferences.smoothness}rem`,
-                            }}
+                            style={
+                                {
+                                    margin: '0px auto',
+                                    width: '75%',
+                                    '--record-padding': `${preferences.space}rem`,
+                                    '--border-radius': `${preferences.smoothness}rem`,
+                                } as CSSProperties
+                            }
                         >
                             <button className="record__file">
                                 <img src={file} alt="File icon" />

@@ -1,7 +1,13 @@
 import download from '../assets/pictures/download.svg';
 import downloadInactive from '../assets/pictures/download_inactive.svg';
 
-export function EditorControls({ hasChosenFile, handleExport }) {
+export function EditorControls({
+    hasChosenFile,
+    handleExport,
+}: {
+    hasChosenFile: boolean;
+    handleExport: () => void;
+}) {
     let className = 'btn-img';
     let img;
     if (!hasChosenFile) {

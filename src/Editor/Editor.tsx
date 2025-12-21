@@ -1,17 +1,28 @@
 import { useEffect, useRef } from 'react';
+import { File } from '../types';
+import { placeholderPhrases } from '../constants';
 
 export function Editor({
+    isPanelCollapsed,
     handleContentChange,
     handleTitleChange,
     titleRef,
     contentRef,
     file,
-    isPanelCollapsed,
+}: {
+    isPanelCollapsed: boolean;
+    handleContentChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    handleTitleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    titleRef: React.RefObject<HTMLInputElement | null>;
+    contentRef: React.RefObject<HTMLTextAreaElement | null>;
+    file: File | undefined;
 }) {
     const placeholder = useRef('');
     useEffect(() => {
         placeholder.current =
-            phrases[Math.floor(Math.random() * phrases.length)];
+            placeholderPhrases[
+                Math.floor(Math.random() * placeholderPhrases.length)
+            ];
     }, [file?.id]);
 
     const noFileIsSelected = file ? false : true;
@@ -31,7 +42,7 @@ export function Editor({
                     const key = e.key.toLowerCase();
                     if (key === 'enter' || key === 'arrowdown') {
                         setTimeout(() => {
-                            contentRef.current.focus();
+                            contentRef.current?.focus();
                         }, 1);
                     }
                 }}
@@ -55,31 +66,3 @@ export function Editor({
         </div>
     );
 }
-
-const phrases = [
-    '😈 Today I will conquer the world!',
-    "I'm so excited for the upcoming holidays!",
-    '📋 TODO:\n\t- Try baseball',
-    'My plans for summer:',
-    "I've waken up with the strong intentions to change the world!",
-    '😤 Never again do I use regular note taking app. It always breaks!',
-    'Ideas worth exploring:',
-    '😎 Stay curious.',
-    'What did I learn today?',
-    '🛑 Top 5 red flags when dating a communist:',
-    'A quick summary of my thoughts:',
-    "🧠 It's the time for the brainstorm!",
-    'Things to improve:',
-    '🤩 My creative journey starts here. What should I write...',
-    '✨ Write something amazing ;)',
-    "Don't forget to save your progress. Oh, wait, it's automatic!",
-    "🤔 Maybe it's the time I try out writing poems.",
-    'Presentation on adequate sense of humor. Part uno.',
-    '🎶 God, I love TheFatRat!',
-    '🥋 Was taking karate classes recently...',
-    '😅 Backend engineer and QA walk into a bar...',
-    'I wish had more free time.',
-    'Never saw Bob so quiet...',
-
-    'Inspired by Obsidian, btw.',
-];

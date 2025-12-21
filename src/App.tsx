@@ -17,15 +17,19 @@ import {
     File,
     FileImportData,
     ImportStatus,
+    LocalStorageKey,
+    LocalStorageContainer,
     Notification,
     Preferences,
+    SetDataOptions,
 } from './types';
 import { PREDEFINED_NOTIFICATIONS, Readme } from './constants';
+import { getItem, setItem } from './utils';
 
 let importedId: number = 0;
 
 let data: File[];
-const savedData = localStorage.getItem('saves');
+const savedData = getItem(LocalStorageContainer.FILES_STORAGE);
 if (!savedData) {
     data = [Readme];
 } else {
@@ -33,7 +37,7 @@ if (!savedData) {
 }
 
 let pref: Preferences;
-const savedPref = localStorage.getItem('pref');
+const savedPref = getItem(LocalStorageContainer.USER_PREFERENCES);
 if (!savedPref) {
     pref = {
         inset: false,
@@ -45,7 +49,7 @@ if (!savedPref) {
 }
 
 let id: number;
-const lastItem = localStorage.getItem('last');
+const lastItem = getItem(LocalStorageContainer.LAST_FILE_OPENED);
 
 if (lastItem) {
     id = parseInt(lastItem);
@@ -99,8 +103,8 @@ export default function App() {
             titleRef.current?.focus();
         }, 1);
 
-        setData('saves', copy);
-        setData('last', nextId);
+        setData('FILES_STORAGE', copy);
+        setData('LAST_FILE_OPENED', nextId);
     };
 
     const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -117,7 +121,7 @@ export default function App() {
                 }
             });
             setSaves(modifiedSaves);
-            setData('saves', modifiedSaves);
+            setData('FILES_STORAGE', modifiedSaves);
         }
     };
 
@@ -137,7 +141,7 @@ export default function App() {
             });
 
             setSaves(modifiedSaves);
-            setData('saves', modifiedSaves);
+            setData('FILES_STORAGE', modifiedSaves);
         }
     };
 
@@ -146,27 +150,27 @@ export default function App() {
             const copy = saves.slice();
             copy.push(Readme);
             setSaves(copy);
-            setData('saves', copy);
+            setData('FILES_STORAGE', copy);
         }
         setFileId(-1);
-        setData('last', -1);
+        setData('LAST_FILE_OPENED', -1);
     };
 
     function changeFile(id: number) {
         setFileId(id);
-        setData('last', id);
+        setData('LAST_FILE_OPENED', id);
         setIsPanelCollapsed(true);
     }
 
     function deleteFile(id: number) {
         if (id === fileId) {
             setFileId(null);
-            setData('last', null);
+            setData('LAST_FILE_OPENED', null);
         }
 
         const modifiedSaves = saves.filter(save => save.id !== id);
         setSaves(modifiedSaves);
-        setData('saves', modifiedSaves);
+        setData('FILES_STORAGE', modifiedSaves);
     }
 
     const handleStatusesDelete = () => {
@@ -194,7 +198,7 @@ export default function App() {
 
                 tempSaves.push(fileObj);
 
-                setData('saves', tempSaves, {
+                setData('FILES_STORAGE', tempSaves, {
                     notification: {
                         key: `FILELOAD::FAIL::${title}`,
                         type: 'danger',
@@ -213,7 +217,7 @@ export default function App() {
                     },
                     throwError: true,
                 });
-                setData('last', nextId, { throwError: true });
+                setData('LAST_FILE_OPENED', nextId, { throwError: true });
                 setFileId(nextId);
 
                 fileData.push({
@@ -241,7 +245,7 @@ export default function App() {
         setStatuses(copy);
 
         setSaves(tempSaves);
-        setData('saves', tempSaves);
+        setData('FILES_STORAGE', tempSaves);
     };
 
     const handleExport = () => {
@@ -279,19 +283,16 @@ export default function App() {
     };
 
     function setData(
-        key: 'saves' | 'last' | 'pref',
+        key: LocalStorageKey,
         data: object | string | number | null,
-        options?: {
-            notification?: Notification;
-            throwError?: boolean;
-        }
+        options?: SetDataOptions
     ): boolean {
         const {
             notification = PREDEFINED_NOTIFICATIONS.STORAGE_EXCEEDED,
             throwError = false,
         } = options || {};
         try {
-            localStorage.setItem(key, JSON.stringify(data));
+            setItem(LocalStorageContainer[key], JSON.stringify(data));
             return true;
         } catch (e) {
             if (e instanceof Error) {

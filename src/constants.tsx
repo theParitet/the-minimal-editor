@@ -64,3 +64,31 @@ export const Readme: File = {
     title: readmeTitle,
     content: readmeContent,
 };
+
+export const placeholderPhrases = [
+    '😈 Today I will conquer the world!',
+    "I'm so excited for the upcoming holidays!",
+    '📋 TODO:\n\t- Try baseball',
+    'My plans for summer:',
+    "I've waken up with the strong intentions to change the world!",
+    '😤 Never again do I use regular note taking app. It always breaks!',
+    'Ideas worth exploring:',
+    '😎 Stay curious.',
+    'What did I learn today?',
+    '🛑 Top 5 red flags when dating a communist:',
+    'A quick summary of my thoughts:',
+    "🧠 It's the time for the brainstorm!",
+    'Things to improve:',
+    '🤩 My creative journey starts here. What should I write...',
+    '✨ Write something amazing ;)',
+    "Don't forget to save your progress. Oh, wait, it's automatic!",
+    "🤔 Maybe it's the time I try out writing poems.",
+    'Presentation on adequate sense of humor. Part uno.',
+    '🎶 God, I love TheFatRat!',
+    '🥋 Was taking karate classes recently...',
+    '😅 Backend engineer and QA walk into a bar...',
+    'I wish had more free time.',
+    'Never saw Bob so quiet...',
+
+    'Inspired by Obsidian, btw.',
+];

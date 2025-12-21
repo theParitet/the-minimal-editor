@@ -1,12 +1,17 @@
 import cross from '../assets/pictures/cross.svg';
+import { Notification } from '../types';
 
 export function Notifications({
     notifications,
     handleDeleteNotification,
     inert,
+}: {
+    notifications: Notification[];
+    handleDeleteNotification: (key: string) => void;
+    inert: boolean;
 }) {
-    const repeat = [];
-    const keys = [];
+    const repeat: ({ count: number } & Notification)[] = [];
+    const keys: string[] = [];
 
     notifications.forEach(ntf => {
         if (!keys.includes(ntf.key)) {
@@ -38,7 +43,7 @@ export function Notifications({
                             </span>
                         )}
                     </h1>
-                    {typeof record === 'string' ? (
+                    {typeof record.description === 'string' ? (
                         <p className="notification__description">
                             {record.description}
                         </p>

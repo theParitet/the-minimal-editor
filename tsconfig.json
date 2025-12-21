@@ -13,9 +13,6 @@
         "noEmit": true,
         "jsx": "react-jsx",
 
-        // Remove after migration
-        "allowJs": true,
-
         "strict": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
