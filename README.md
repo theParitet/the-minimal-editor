@@ -21,7 +21,7 @@ The Minimal Editor is a web-based plain text editor designed for simplicity and 
 
 - **React 19**
 - **Vite**
-- **JavaScript**
+- **TypeScript**
 - **CSS**
 - **GitHub Actions** for deployment on **GitHub Pages**
 
@@ -70,6 +70,13 @@ This project is automatically deployed to **GitHub Pages** via **GitHub Actions*
 
 - **Linting** – The code must pass ESLint checks (`npm run lint`).
 - **Formatting** – The code must adhere to Prettier formatting (`npm run format:check` to check and `npm run format` to format).
+- **Types** – The TypeScript source code files must pass the type-checking (`npm run ts:check`).
+
+Alternatively, to run all the checks at once, you can use:
+
+```bash
+npm run check
+```
 
 The build is only accepted when these checks pass successfully.
 
