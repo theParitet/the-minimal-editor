@@ -84,25 +84,38 @@ The build is only accepted when these checks pass successfully.
 
 The project structure is organized as follows:
 
-```
+```bash
 src/
+├── assets/         # Static assets (fonts, icons)
+│
+│   # Components
 ├── Editor/         # Core editor components (input area, controls)
 ├── Modal/          # Modal components (Settings)
 ├── Notifications/  # Notification system components
 ├── Panel/          # Side panel for file management
 ├── Statuses/       # Import status indicators
-├── assets/         # Static assets (fonts, icons)
-├── App.jsx         # Main application component
-└── main.jsx        # Entry point
+│
+│   # App Root
+├── App.css         # Main component styles
+├── App.tsx         # Main application component
+│
+│   # Shared
+├── constants.tsx   # Application constants
+├── types.tsx       # TypeScript type definitions
+├── utils.ts        # Utility functions
+│
+│   # Entry
+├── index.css       # Global styles
+└── main.tsx        # Entry point
 ```
 
 ## Roadmap
 
-- Switch from `localStorage` (blocking) to `indexedDB` (async) using a wrapper (like `idb` or `Dexie.js`)
-- Implement `StorageManager` browser API to allow persistence with the local machine and allow approximation of taken space.
-- Explore the possibility of making the application to be PWA with Service Workers
-- Searching and sorting
-- Extended Theming (modern, neumorphism, glass; accent colors)
+- Switch from `localStorage` (blocking) to `indexedDB` (async) web storage
+- Explore persistence with the local machine and with approximation of taken space
+- Explore the possibility of making the application work offline
+- Extended theming (modern, neumorphism, glass; accent colors)
 - Proper file structure (with directories)
-- Add automatic title option based on content
-- Verbose file panel (with partial content display)
+- Searching and sorting
+
+For extended roadmap, check out [TECH_ROADMAP.md](/TECH_ROADMAP.md).
