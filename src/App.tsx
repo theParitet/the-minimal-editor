@@ -142,7 +142,7 @@ export default function App() {
     };
 
     const handleAddReadme = () => {
-        if (saves.find(save => save.id === -1)) {
+        if (!saves.some(save => save.id === -1)) {
             const copy = saves.slice();
             copy.push(Readme);
             setSaves(copy);
