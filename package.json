@@ -6,10 +6,12 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "lint": "eslint .",
         "preview": "vite preview",
         "format": "prettier --write .",
-        "format:check": "prettier --check ."
+        "format:check": "prettier --check .",
+        "lint": "eslint .",
+        "ts:check": "tsc --noEmit",
+        "check": "npm run format:check && npm run lint && npm run ts:check"
     },
     "dependencies": {
         "react": "^19.1.0",
