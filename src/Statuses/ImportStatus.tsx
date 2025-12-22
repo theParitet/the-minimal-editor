@@ -4,11 +4,15 @@ import check from '../assets/pictures/check.svg';
 import cross from '../assets/pictures/cross.svg';
 import { FileImportData } from '../types';
 
-export function Status({ fileData }: { fileData: FileImportData[] }) {
+export default function ImportStatus({
+    fileData,
+}: {
+    fileData: FileImportData[];
+}) {
     // each object in filedata array has 'title' and 'error'
     const [isCollapsed, setIsCollapsed] = useState(true);
 
-    const handleCollapse = () => {
+    const toggleImportStatusCollapse = () => {
         setIsCollapsed(!isCollapsed);
     };
 
@@ -33,7 +37,7 @@ export function Status({ fileData }: { fileData: FileImportData[] }) {
                 <img
                     className={classNameCheck}
                     src={file.error ? cross : check}
-                    alt=""
+                    alt={file.error ? 'A cross icon' : 'A check icon'}
                 />
             </div>
         );
@@ -52,7 +56,15 @@ export function Status({ fileData }: { fileData: FileImportData[] }) {
     const placeholderJSX = <div className="placeholder">No files</div>;
     return (
         <div className={classNameStatus}>
-            <button className="status__message" onClick={handleCollapse}>
+            <button
+                className="status__message"
+                onClick={toggleImportStatusCollapse}
+                aria-label={
+                    isCollapsed
+                        ? 'Expand the import status'
+                        : 'Collapse the import status'
+                }
+            >
                 <span>{message}</span>
                 <div
                     className={
@@ -61,7 +73,11 @@ export function Status({ fileData }: { fileData: FileImportData[] }) {
                             : 'btn-img arrow'
                     }
                 >
-                    <img className="img--arrow" src={arrowDown} alt="" />
+                    <img
+                        className="img--arrow"
+                        src={arrowDown}
+                        alt="Expand/Collapse arrow icon"
+                    />
                 </div>
             </button>
 

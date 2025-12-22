@@ -1,17 +1,17 @@
-import { ImportStatus } from '../types';
-import { Status } from './Status';
+import { ImportStatusType } from '../types';
+import ImportStatus from './ImportStatus';
 
-export function Statuses({
+export default function ImportStatuses({
     statuses,
-    handleImport,
-    handleStatusesDelete,
+    importFiles,
+    clearAllStatuses,
 }: {
-    handleImport: React.ChangeEventHandler<HTMLInputElement>;
-    handleStatusesDelete: () => void;
-    statuses: ImportStatus[];
+    importFiles: React.ChangeEventHandler<HTMLInputElement>;
+    clearAllStatuses: () => void;
+    statuses: ImportStatusType[];
 }) {
     const StatusesJSX = statuses.map(status => {
-        return <Status fileData={status.files} key={status.id} />;
+        return <ImportStatus fileData={status.files} key={status.id} />;
     });
     const placeholderJSX = <p className="placeholder">No imports yet...</p>;
 
@@ -23,7 +23,8 @@ export function Statuses({
                 </label>
                 <input
                     id="file-reader"
-                    onChange={handleImport}
+                    aria-label="Import a text file"
+                    onChange={importFiles}
                     multiple={true}
                     type="file"
                     accept="text/*"
@@ -31,7 +32,8 @@ export function Statuses({
 
                 <button
                     className="btn btn--default"
-                    onClick={handleStatusesDelete}
+                    aria-label="Clear the upload status messages"
+                    onClick={clearAllStatuses}
                 >
                     Clear
                 </button>

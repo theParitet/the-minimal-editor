@@ -1,4 +1,4 @@
-export type File = {
+export type FileType = {
     id: number;
     title: string;
     content: string;
@@ -8,12 +8,12 @@ export type FileImportData = {
     title: string;
     error: string;
 };
-export type ImportStatus = {
+export type ImportStatusType = {
     id: number;
     files: FileImportData[];
 };
 
-export type Notification = {
+export type NotificationType = {
     key: string;
     type: 'danger' | 'warning' | 'info';
     title: string;
@@ -35,7 +35,7 @@ export type LocalStorageKey = keyof typeof LocalStorageContainer;
 export type LocalStorageValue = (typeof LocalStorageContainer)[LocalStorageKey];
 
 export type SetDataOptions = {
-    notification?: Notification;
+    notification?: NotificationType;
     throwError?: boolean;
 };
 

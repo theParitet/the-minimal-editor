@@ -4,7 +4,7 @@ import trash from '../assets/pictures/trash.svg';
 import { Preferences, SetDataFunction, SettingsMenuType } from '../types';
 import { CSSProperties } from 'react';
 
-export function SettingsContent({
+export default function SettingsContent({
     current,
     preferences,
     setPreferences,
@@ -16,12 +16,6 @@ export function SettingsContent({
     setData: SetDataFunction;
 }) {
     switch (current) {
-        case null:
-            return (
-                <p className="placeholder">
-                    Choose what you want to tinker with...
-                </p>
-            );
         case 'Appearance':
             return (
                 <>
@@ -36,19 +30,20 @@ export function SettingsContent({
                             className="btn-img btn-img--default btn-inset"
                             htmlFor="btn-is-inset1"
                         >
-                            <img src={search} alt="" />
+                            <img src={search} alt="A magnifying glass icon" />
                         </label>
                         <label
                             className="btn-img btn-img--default"
                             htmlFor="btn-is-inset2"
                         >
-                            <img src={search} alt="" />
+                            <img src={search} alt="A magnifying glass icon" />
                         </label>
                     </div>
 
                     <div className="settings__options">
                         <input
                             id="btn-is-inset1"
+                            aria-label="Inset theme"
                             type="radio"
                             name="option"
                             onChange={() => {
@@ -63,6 +58,7 @@ export function SettingsContent({
                         />
                         <input
                             id="btn-is-inset2"
+                            aria-label="Modern theme"
                             type="radio"
                             name="option"
                             onChange={() => {
@@ -82,6 +78,7 @@ export function SettingsContent({
                         <h3>Smoothness</h3>
                         <input
                             type="range"
+                            aria-label="Padding"
                             min={0}
                             max={1}
                             step={0.05}
@@ -99,6 +96,7 @@ export function SettingsContent({
 
                         <input
                             type="range"
+                            aria-label="Smoothness"
                             min={0}
                             max={1}
                             step={0.05}
@@ -137,7 +135,7 @@ export function SettingsContent({
                                 } as CSSProperties
                             }
                         >
-                            <button className="record__file">
+                            <div className="record__file">
                                 <img src={file} alt="File icon" />
                                 <p
                                     className={'record__title'}
@@ -147,10 +145,10 @@ export function SettingsContent({
                                 >
                                     Lorem ipsum dolor
                                 </p>
-                            </button>
-                            <button className="btn-img btn-img--danger record__trash">
-                                <img src={trash} alt="Delete a file" />
-                            </button>
+                            </div>
+                            <div className="btn-img btn-img--danger record__trash">
+                                <img src={trash} alt="Trash icon" />
+                            </div>
                         </label>
                         <label
                             className="record selected"
@@ -163,7 +161,7 @@ export function SettingsContent({
                                 } as CSSProperties
                             }
                         >
-                            <button className="record__file">
+                            <div className="record__file">
                                 <img src={file} alt="File icon" />
                                 <p
                                     className={'record__title'}
@@ -173,10 +171,10 @@ export function SettingsContent({
                                 >
                                     Lorem ipsum dolor
                                 </p>
-                            </button>
-                            <button className="btn-img btn-img--danger record__trash">
+                            </div>
+                            <div className="btn-img btn-img--danger record__trash">
                                 <img src={trash} alt="Delete a file" />
-                            </button>
+                            </div>
                         </label>
                     </div>
                 </>

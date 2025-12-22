@@ -3,17 +3,17 @@ import trash from '../assets/pictures/trash.svg';
 import { Preferences } from '../types';
 import { CSSProperties } from 'react';
 
-export function File({
+export default function File({
     title,
     isSelected,
-    handleFileChange,
-    handleFileDelete,
+    switchFile,
+    deleteFile,
     preferences,
 }: {
     title: string;
     isSelected: boolean;
-    handleFileChange: () => void;
-    handleFileDelete: () => void;
+    switchFile: () => void;
+    deleteFile: () => void;
     preferences: Preferences;
 }) {
     let classNameTitle = title ? 'record__title' : 'record__title empty';
@@ -29,15 +29,20 @@ export function File({
                 } as CSSProperties
             }
         >
-            <button className={'record__file'} onClick={handleFileChange}>
+            <button
+                className={'record__file'}
+                onClick={switchFile}
+                aria-label="Switch to this file"
+            >
                 <img src={file} alt="File icon" />
-                <p className={classNameTitle}>{title || 'Empty Title'}</p>
+                <span className={classNameTitle}>{title || 'Empty Title'}</span>
             </button>
             <button
                 className="btn-img btn-img--danger record__trash"
-                onClick={handleFileDelete}
+                onClick={deleteFile}
+                aria-label="Delete this file"
             >
-                <img src={trash} alt="Delete a file" />
+                <img src={trash} alt="Trash icon" />
             </button>
         </div>
     );

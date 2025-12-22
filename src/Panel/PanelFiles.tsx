@@ -1,16 +1,16 @@
-import { Preferences, File as FileType } from '../types';
-import { File } from './File';
+import { Preferences, FileType as FileType } from '../types';
+import File from './File';
 
-export function PanelFiles({
+export default function PanelFiles({
     saves,
     id,
-    changeFile,
+    switchFile,
     deleteFile,
     preferences,
 }: {
     saves: FileType[];
     id: number | null;
-    changeFile: (id: number) => void;
+    switchFile: (id: number) => void;
     deleteFile: (id: number) => void;
     preferences: Preferences;
 }) {
@@ -25,8 +25,8 @@ export function PanelFiles({
                             isSelected={isSelected}
                             title={file.title}
                             preferences={preferences}
-                            handleFileChange={() => changeFile(file.id)}
-                            handleFileDelete={() => deleteFile(file.id)}
+                            switchFile={() => switchFile(file.id)}
+                            deleteFile={() => deleteFile(file.id)}
                         />
                     );
                 })

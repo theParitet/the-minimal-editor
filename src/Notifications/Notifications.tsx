@@ -1,16 +1,16 @@
 import cross from '../assets/pictures/cross.svg';
-import { Notification } from '../types';
+import { NotificationType } from '../types';
 
-export function Notifications({
+export default function Notifications({
     notifications,
-    handleDeleteNotification,
+    removeNotificationByKey,
     inert,
 }: {
-    notifications: Notification[];
-    handleDeleteNotification: (key: string) => void;
+    notifications: NotificationType[];
+    removeNotificationByKey: (key: string) => void;
     inert: boolean;
 }) {
-    const repeat: ({ count: number } & Notification)[] = [];
+    const repeat: ({ count: number } & NotificationType)[] = [];
     const keys: string[] = [];
 
     notifications.forEach(ntf => {
@@ -33,7 +33,11 @@ export function Notifications({
 
     const notificationsJSX = repeat.map(record => {
         return (
-            <div className={'notification ' + record.type} key={record.key}>
+            <div
+                className={'notification ' + record.type}
+                key={record.key}
+                role={record.type === 'danger' ? 'alert' : 'status'}
+            >
                 <div>
                     <h1 className="notification__title">
                         {record.title}{' '}
@@ -53,16 +57,23 @@ export function Notifications({
                 </div>
                 <button
                     className="btn-img btn-img--default notification__btn"
-                    onClick={() => handleDeleteNotification(record.key)}
+                    onClick={() => removeNotificationByKey(record.key)}
+                    aria-label="Close the notification"
                 >
-                    <img src={cross} alt="" />
+                    <img src={cross} alt="Cross icon" />
                 </button>
             </div>
         );
     });
 
     return (
-        <div inert={inert} className="notification-container">
+        <div
+            inert={inert}
+            className="notification-container"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+        >
             {notificationsJSX}
         </div>
     );

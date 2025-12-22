@@ -1,4 +1,4 @@
-import { Notification, File } from './types';
+import { NotificationType, FileType } from './types';
 
 export const PREDEFINED_NOTIFICATIONS = {
     STORAGE_EXCEEDED: {
@@ -32,7 +32,7 @@ export const PREDEFINED_NOTIFICATIONS = {
             </p>
         ),
     },
-} as const satisfies Record<string, Notification>;
+} as const satisfies Record<string, NotificationType>;
 
 export const VERSION = 'v0.1.2';
 
@@ -59,7 +59,7 @@ The editor will be continuously improved. It will:
 [more]
 If you wish to learn more, you can find additional information on GitHub by following the link in the header or About section of the settings.`;
 
-export const Readme: File = {
+export const Readme: FileType = {
     id: -1,
     title: readmeTitle,
     content: readmeContent,

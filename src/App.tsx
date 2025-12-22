@@ -6,20 +6,20 @@ import zenIcon from './assets/pictures/zen.svg';
 import githubIcon from './assets/pictures/github-mark-white.svg';
 
 import './App.css';
-import { Notifications } from './Notifications/Notifications';
-import { EditorControls } from './Editor/EditorControls';
-import { Editor } from './Editor/Editor';
-import { PanelControls } from './Panel/PanelControls';
-import { PanelFiles } from './Panel/PanelFiles';
-import { SettingsModal } from './Modal/SettingsModal';
+import Notifications from './Notifications/Notifications';
+import EditorControls from './Editor/EditorControls';
+import Editor from './Editor/Editor';
+import PanelControls from './Panel/PanelControls';
+import PanelFiles from './Panel/PanelFiles';
+import SettingsModal from './Modal/SettingsModal';
 
 import {
-    File,
+    FileType,
     FileImportData,
-    ImportStatus,
+    ImportStatusType,
     LocalStorageKey,
     LocalStorageContainer,
-    Notification,
+    NotificationType,
     Preferences,
     SetDataOptions,
 } from './types';
@@ -28,7 +28,7 @@ import { getItem, setItem } from './utils';
 
 let importedId: number = 0;
 
-let data: File[];
+let data: FileType[];
 const savedData = getItem(LocalStorageContainer.FILES_STORAGE);
 if (!savedData) {
     data = [Readme];
@@ -57,11 +57,11 @@ if (lastItem) {
 
 export default function App() {
     const [fileId, setFileId] = useState<number | null>(id);
-    const [saves, setSaves] = useState<File[]>(data);
-    const [statuses, setStatuses] = useState<ImportStatus[]>([]);
+    const [saves, setSaves] = useState<FileType[]>(data);
+    const [statuses, setStatuses] = useState<ImportStatusType[]>([]);
     const [isPanelCollapsed, setIsPanelCollapsed] = useState<boolean>(true);
 
-    const [notifications, setNotifications] = useState<Notification[]>([]);
+    const [notifications, setNotifications] = useState<NotificationType[]>([]);
 
     const [preferences, setPreferences] = useState<Preferences>(pref);
     const [inert, setInert] = useState(false);
@@ -70,7 +70,7 @@ export default function App() {
     const titleRef = useRef<HTMLInputElement>(null);
     const contentRef = useRef<HTMLTextAreaElement>(null);
 
-    const currentFile: File | undefined = saves.find(
+    const currentFile: FileType | undefined = saves.find(
         save => save.id === fileId
     );
 
@@ -88,7 +88,7 @@ export default function App() {
         return lastId;
     }
 
-    const handleNewFile = () => {
+    const createNewFile = () => {
         const copy = saves.slice();
         const nextId = getNextId();
         copy.push({
@@ -107,7 +107,7 @@ export default function App() {
         setData('LAST_FILE_OPENED', nextId);
     };
 
-    const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const onContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         if (fileId || fileId === 0) {
             const modifiedSaves = saves.map(save => {
                 if (save.id !== fileId) {
@@ -125,7 +125,7 @@ export default function App() {
         }
     };
 
-    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (fileId || fileId === 0) {
             let title = e.target.value;
 
@@ -145,7 +145,7 @@ export default function App() {
         }
     };
 
-    const handleAddReadme = () => {
+    const addReadmeFile = () => {
         if (!saves.some(save => save.id === -1)) {
             const copy = saves.slice();
             copy.push(Readme);
@@ -156,7 +156,7 @@ export default function App() {
         setData('LAST_FILE_OPENED', -1);
     };
 
-    function changeFile(id: number) {
+    function switchFile(id: number) {
         setFileId(id);
         setData('LAST_FILE_OPENED', id);
         setIsPanelCollapsed(true);
@@ -173,11 +173,11 @@ export default function App() {
         setData('FILES_STORAGE', modifiedSaves);
     }
 
-    const handleStatusesDelete = () => {
+    const clearAllStatuses = () => {
         setStatuses([]);
     };
 
-    const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const importFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const initFiles = e.target.files;
         if (initFiles === null) return;
         const fileData: FileImportData[] = []; //title + error (if any)
@@ -248,7 +248,7 @@ export default function App() {
         setData('FILES_STORAGE', tempSaves);
     };
 
-    const handleExport = () => {
+    const exportCurrentFile = () => {
         if (currentFile === undefined) return;
         const blob = new Blob([currentFile.content], { type: 'text/*' });
 
@@ -273,11 +273,11 @@ export default function App() {
         URL.revokeObjectURL(link.href);
     };
 
-    function addNotification(notification: Notification) {
+    function addNotification(notification: NotificationType) {
         setNotifications(prev => [notification, ...prev]);
     }
 
-    const handleDeleteNotification = (key: string) => {
+    const removeNotificationByKey = (key: string) => {
         const copy = notifications.slice();
         setNotifications(copy.filter(notification => notification.key !== key));
     };
@@ -312,26 +312,31 @@ export default function App() {
                     The <span className="header__hero--highlight">Minimal</span>{' '}
                     Editor
                 </h1>
-                <button className="header__btn" onClick={handleAddReadme}>
+                <button
+                    className="header__btn"
+                    onClick={addReadmeFile}
+                    aria-label="See info file"
+                >
                     Learn more
                 </button>
                 <a
                     className="btn-img btn-img--default"
                     href="https://github.com/theParitet/the-minimal-editor"
                     target="_blank"
+                    aria-label="Visit GitHub repository"
                     style={{
                         position: 'absolute',
                         right: '.3rem',
                     }}
                 >
-                    <img width={24} src={githubIcon} />
+                    <img width={24} src={githubIcon} alt="GitHub icon" />
                 </a>
             </header>
 
             {inert &&
                 createPortal(
                     <SettingsModal
-                        handleInert={() => setInert(!inert)}
+                        closeModal={() => setInert(!inert)}
                         preferences={preferences}
                         setPreferences={setPreferences}
                         setData={setData}
@@ -342,7 +347,7 @@ export default function App() {
             {notifications.length !== 0 && (
                 <Notifications
                     notifications={notifications}
-                    handleDeleteNotification={handleDeleteNotification}
+                    removeNotificationByKey={removeNotificationByKey}
                     inert={inert}
                 />
             )}
@@ -355,8 +360,12 @@ export default function App() {
                 inert={inert}
             >
                 {zen && (
-                    <button className="btn-zen" onClick={() => setZen(!zen)}>
-                        <img src={zenIcon} alt="" />
+                    <button
+                        className="btn-zen"
+                        onClick={() => setZen(!zen)}
+                        aria-label="Exit Zen mode"
+                    >
+                        <img src={zenIcon} alt="Zen mode icon" />
                     </button>
                 )}
 
@@ -370,14 +379,14 @@ export default function App() {
                 >
                     <PanelControls
                         statuses={statuses}
-                        handleNewFile={handleNewFile}
-                        handleImport={handleImport}
-                        handleStatusesDelete={handleStatusesDelete}
-                        handleZen={() => {
+                        createNewFile={createNewFile}
+                        importFiles={importFiles}
+                        clearAllStatuses={clearAllStatuses}
+                        toggleZenMode={() => {
                             setZen(!zen);
                             setIsPanelCollapsed(true);
                         }}
-                        handleSettings={() => {
+                        openSettingsModal={() => {
                             setInert(!inert);
                             setIsPanelCollapsed(true);
                         }}
@@ -385,7 +394,7 @@ export default function App() {
                     <PanelFiles
                         id={fileId}
                         saves={saves}
-                        changeFile={changeFile}
+                        switchFile={switchFile}
                         deleteFile={deleteFile}
                         preferences={preferences}
                     />
@@ -394,10 +403,15 @@ export default function App() {
                         onClick={() => {
                             setIsPanelCollapsed(!isPanelCollapsed);
                         }}
+                        aria-label={
+                            isPanelCollapsed
+                                ? 'Expand file panel'
+                                : 'Collapse file panel'
+                        }
                     >
                         <img
                             src={expand}
-                            alt=""
+                            alt="Expand/Collapse icon"
                             style={
                                 !isPanelCollapsed ? { rotate: '180deg' } : {}
                             }
@@ -407,16 +421,16 @@ export default function App() {
 
                 <article id="editor" className="manager__editor">
                     <EditorControls
-                        hasChosenFile={currentFile ? true : false}
-                        handleExport={handleExport}
+                        hasSelectedAFile={currentFile ? true : false}
+                        exportCurrentFile={exportCurrentFile}
                     />
                     <Editor
                         isPanelCollapsed={isPanelCollapsed}
                         file={currentFile}
                         titleRef={titleRef}
                         contentRef={contentRef}
-                        handleTitleChange={handleTitleChange}
-                        handleContentChange={handleContentChange}
+                        onTitleChange={onTitleChange}
+                        onContentChange={onContentChange}
                     />
                 </article>
             </main>

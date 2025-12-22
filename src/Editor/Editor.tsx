@@ -1,21 +1,21 @@
 import { useEffect, useRef } from 'react';
-import { File } from '../types';
+import { FileType } from '../types';
 import { placeholderPhrases } from '../constants';
 
-export function Editor({
+export default function Editor({
     isPanelCollapsed,
-    handleContentChange,
-    handleTitleChange,
+    onContentChange,
+    onTitleChange,
     titleRef,
     contentRef,
     file,
 }: {
     isPanelCollapsed: boolean;
-    handleContentChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-    handleTitleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onContentChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    onTitleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     titleRef: React.RefObject<HTMLInputElement | null>;
     contentRef: React.RefObject<HTMLTextAreaElement | null>;
-    file: File | undefined;
+    file: FileType | undefined;
 }) {
     const placeholder = useRef('');
     useEffect(() => {
@@ -33,10 +33,11 @@ export function Editor({
             <input
                 type="text"
                 id="editor__title"
+                aria-label="File title"
                 className={noFileIsSelected ? 'editor disabled' : 'editor'}
                 placeholder="Your title..."
                 spellCheck={true}
-                onChange={handleTitleChange}
+                onChange={onTitleChange}
                 ref={titleRef}
                 onKeyDown={e => {
                     const key = e.key.toLowerCase();
@@ -55,8 +56,9 @@ export function Editor({
             />
             <textarea
                 id="editor__main"
+                aria-label="File content"
                 className={noFileIsSelected ? 'editor disabled' : 'editor'}
-                onChange={handleContentChange}
+                onChange={onContentChange}
                 spellCheck={true}
                 placeholder={placeholder.current}
                 disabled={noFileIsSelected || isDisabled}

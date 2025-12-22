@@ -1,16 +1,16 @@
 import download from '../assets/pictures/download.svg';
 import downloadInactive from '../assets/pictures/download_inactive.svg';
 
-export function EditorControls({
-    hasChosenFile,
-    handleExport,
+export default function EditorControls({
+    hasSelectedAFile,
+    exportCurrentFile,
 }: {
-    hasChosenFile: boolean;
-    handleExport: () => void;
+    hasSelectedAFile: boolean;
+    exportCurrentFile: () => void;
 }) {
     let className = 'btn-img';
     let img;
-    if (!hasChosenFile) {
+    if (!hasSelectedAFile) {
         className += ' inactive';
         img = downloadInactive;
     } else {
@@ -19,8 +19,12 @@ export function EditorControls({
     }
     return (
         <section className="editor__controls">
-            <button className={className} onClick={handleExport}>
-                <img src={img} alt="Download the file" />
+            <button
+                className={className}
+                onClick={exportCurrentFile}
+                aria-label="Export the current file"
+            >
+                <img src={img} alt="Download icon" />
             </button>
         </section>
     );
