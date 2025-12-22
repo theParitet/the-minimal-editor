@@ -32,7 +32,7 @@ export default function File({
             <button
                 className={'record__file'}
                 onClick={switchFile}
-                aria-label="Switch to this file"
+                aria-label={`Switch to ${title} file`}
             >
                 <img src={file} alt="File icon" />
                 <span className={classNameTitle}>{title || 'Empty Title'}</span>
