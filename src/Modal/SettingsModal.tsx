@@ -24,11 +24,12 @@ export default function SettingsModal({
     useEffect(() => {
         const settingsButton = document.activeElement as HTMLElement;
 
-        document.addEventListener('keydown', e => {
+        const closeModelWithEscape = (e: KeyboardEvent) => {
             if (e.key === 'Escape') {
                 closeModal();
             }
-        });
+        };
+        document.addEventListener('keydown', closeModelWithEscape);
 
         setTimeout(() => {
             const d = document.getElementById(
@@ -41,6 +42,7 @@ export default function SettingsModal({
             setTimeout(() => {
                 settingsButton.focus();
             }, 10);
+            document.removeEventListener('keydown', closeModelWithEscape);
         };
     }, []);
 
