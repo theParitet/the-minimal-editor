@@ -1,15 +1,11 @@
 :root {
     --top-bar-padding: 0.2rem;
-    /* --manager-width: 1500px; */
     --manager-width: 1200px;
-    /* --editor-padding-inline: 2rem; */
     --editor-padding-inline: 1.5rem;
 
     --color--accent--main: #94e3df;
     --color--accent--secondary: #b0e0e6;
     --color--success--1: rgb(75, 235, 99);
-    /* --color--warning: rgb(235, 150, 75);
-    --color--danger: rgb(235, 75, 75); */
     --color--success--2: #28b843;
     --color--warning: #eb964b;
     --color--danger: #eb4b4b;
@@ -33,6 +29,7 @@ button {
 }
 * {
     box-sizing: border-box;
+    /* For debugging */
     /* outline: .1px solid paleturquoise; */
 }
 *:focus-visible {
@@ -70,8 +67,6 @@ a {
     color: var(--color--accent--main);
     text-decoration: underline;
 
-    /* padding: .25rem .5rem; */
-    /* padding: .25rem .25rem; */
     padding: 0.1rem 0.1rem;
     border: none;
     border-radius: 0.3rem;
@@ -94,10 +89,6 @@ strong {
     padding: 0.3rem;
     font-size: 1rem;
 
-    /* max-width: min(100vw, var(--manager-width));
-    overflow: hidden;
-    text-wrap: nowrap;
-    text-overflow: ellipsis; */
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -270,9 +261,6 @@ strong {
     display: flex;
     justify-content: space-between;
 }
-#settings_menu_close_btn {
-    position: relative;
-}
 .modal__top-bar:has(
         :is(
             #settings_menu_close_btn:focus,
@@ -339,7 +327,6 @@ kbd {
     }
     .record:focus,
     .record:hover {
-        /* border-radius: 0 var(--border-radius) var(--border-radius) 0; */
         box-shadow:
             inset 0 0 0.5rem #eeeeee22,
             0 0 0.5rem #11111188;
@@ -381,7 +368,6 @@ kbd {
         display: none;
     }
     #editor__title {
-        /* height: 1rem; */
         text-align: center;
         padding: 0.75rem 3rem;
         font-size: 1rem;
@@ -448,7 +434,6 @@ body:has(#manager.zen) .header {
     font-family: Rubik, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 .editor:focus {
-    /* background-color: #222; */
     background-color: #242424;
 }
 .disabled.editor {
@@ -505,7 +490,6 @@ body:has(#manager.zen) .header {
 .panel__controls {
     display: flex;
 
-    /* align-self: flex-end; */
     align-self: center;
 
     align-items: center;
@@ -531,24 +515,18 @@ body:has(#manager.zen) .header {
     padding: 0.5rem;
     display: flex;
     flex-direction: column;
-    /* gap: .2rem; */
 
     height: 100%;
     overflow: auto;
 }
-/* .record * {
-    outline: 1px solid #b0e0e688;
-} */
 
 .record {
-    /* --record-padding: .5rem; */
-    --record-padding: 1rem;
-    /* --record-padding: .25rem; */
+    /* --record-padding: 1rem; */
+    --record-padding: 0.5rem;
     /* --record-padding: 0px; */
 
     max-width: 100%;
     --height: calc(2rem + var(--record-padding) * 2);
-    /* --height: calc(1rem + var(--record-padding) * 2); */ /* PINNED */
     height: var(--height);
 
     display: flex;
@@ -570,10 +548,6 @@ body:has(#manager.zen) .header {
 .record img {
     height: 1.5rem;
 }
-/* PINNED */
-/* .record img { 
-    height: 1rem;
-} */
 /* .record img { 
     --img-dimension: calc(var(--height )/2);
     height: var(--img-dimension);
@@ -585,7 +559,6 @@ body:has(#manager.zen) .header {
 }
 .record:has(.record__file:focus-visible) {
     outline: 2px solid hsl(187, 52%, 80%, 0.5);
-    /* outline: 2px solid #00000033; */
 }
 
 .selected.record {
@@ -704,17 +677,8 @@ body:not(:has(.record__trash:hover)) .record:active {
 }
 
 input[type='file'] {
-    /* visibility: hidden;
-    display: inline;
-    width: 1px;
-    height: 1px; */
-    /* margin: -1px; */
-
-    /* position: absolute; */
     opacity: 0;
     width: 0;
-    /* visibility: hidden; */
-    /* display: none; */
 }
 body:has(#file-reader:focus-visible) label[for='file-reader'] {
     background-color: #eeeeee22;
@@ -791,19 +755,14 @@ body:has(#file-reader:focus-visible) label[for='file-reader'] {
 
     z-index: 1;
     display: flex;
-    /* justify-content: center; */
     flex-direction: column;
 
     background-color: #555;
 
     border-radius: 0.4rem;
 
-    /* padding: .4rem; */
     margin: 0;
     animation: expand 400ms cubic-bezier(0, 0, 0, 1) 1 forwards;
-
-    /* text-wrap: nowrap;
-    overflow: hidden; */
 
     border: 2px solid var(--color--success--1);
 }
@@ -825,8 +784,6 @@ body:has(#file-reader:focus-visible) label[for='file-reader'] {
     padding: 0.4rem;
 
     background-color: #444;
-    /* background-color: #33333366; */
-    /* background-color: #eeeeee11; */
 }
 .status__message > span {
     text-wrap: nowrap;
@@ -836,12 +793,9 @@ body:has(#file-reader:focus-visible) label[for='file-reader'] {
 .status__message:focus,
 .status__message:hover {
     background-color: #333333aa;
-    /* background-color: #eeeeee28; */
 }
 .status__message:active {
     background-color: #333333;
-    /* background-color: #333; */
-    /* background-color: #eeeeee44; */
 }
 
 .status__files {
@@ -882,19 +836,7 @@ body:has(#file-reader:focus-visible) label[for='file-reader'] {
 }
 .status__files__file__container:first-child {
     margin-top: 0.2rem;
-    /* position: relative; */
 }
-/* .status__files__file__container:first-child::before {
-    content: '';
-    position: absolute;
-    z-index: 3;
-    top: -.2rem;
-    right: 0;
-
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, #eeeeee22, #eeeeee22);
-} */
 .status__files__file__container:last-child {
     margin-bottom: 0.2rem;
 }
@@ -931,17 +873,8 @@ body:has(#file-reader:focus-visible) label[for='file-reader'] {
     width: 1.25rem;
     height: 1.25rem;
     transition: 300ms transform ease-out;
-    /* border-radius: 50%; */
 }
-/* .arrow:focus,
-.arrow:hover {
-    background-color: #eeeeee22;
-}
-.arrow:active {
-    background-color: #eeeeee44;
-} */
 .collapsed.arrow {
-    /* transform: rotateZ(180deg); */
     transform: rotateX(180deg);
 }
 .img--arrow {
@@ -1007,8 +940,6 @@ body:has(#file-reader:focus-visible) label[for='file-reader'] {
 
         background-color: transparent;
 
-        /* box-shadow: inset -.2rem 0 .2rem -.1rem #eeeeee22, .1rem 0 .1rem black; */
-        /* box-shadow: inset -.15rem 0 .2rem -.1rem #eeeeee22, .2rem 0 .2rem #000000aa; */
         box-shadow:
             inset -0.15rem 0 0.2rem -0.15rem #eeeeee22,
             0.1rem 0.1rem 0.1rem #00000033,
@@ -1022,10 +953,6 @@ body:has(#file-reader:focus-visible) label[for='file-reader'] {
         background-color: #2a2a2a;
     }
     .collapsed.manager__panel .manager__panel__expand-btn {
-        /* box-shadow: 0 0 .4rem -.2rem #eee; */
-        /* box-shadow: 0 0 1rem -.8rem #eee; */
-
-        /* box-shadow: 0 0 .2rem #eeeeee44, inset 0 0 .2rem black; */
         box-shadow:
             inset 0 0 0.2rem #eeeeee22,
             -0.05rem 0 0.2rem #000000aa;
@@ -1051,7 +978,6 @@ body:has(#file-reader:focus-visible) label[for='file-reader'] {
 
     .editor__controls {
         padding-left: calc(2rem + var(--top-bar-padding));
-        /* display: none; */
     }
 }
 
@@ -1070,7 +996,6 @@ body:has(#file-reader:focus-visible) label[for='file-reader'] {
     gap: 0.3rem;
 
     width: 400px;
-    /* max-width: 400px; */
     max-width: calc(100vw - 0.3rem);
 }
 
