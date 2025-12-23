@@ -292,8 +292,13 @@ strong {
     position: relative;
     top: 50%;
 
-    color: #eeeeee88;
+    color: #eeeeeeaa;
     font-size: 0.8rem;
+}
+@media (pointer: coarse) {
+    .modal__hint {
+        display: none !important;
+    }
 }
 @keyframes appear {
     0% {
@@ -575,6 +580,14 @@ body:has(#manager.zen) .header {
     width: var(--img-dimension);
 } */
 
+.record__file {
+    outline: none;
+}
+.record:has(.record__file:focus-visible) {
+    outline: 2px solid hsl(187, 52%, 80%, 0.5);
+    /* outline: 2px solid #00000033; */
+}
+
 .selected.record {
     background-color: #b0e0e633;
 }
@@ -599,17 +612,15 @@ body:not(:has(.record__trash:hover)) .record:active {
     padding: var(--record-padding) 0;
 }
 
-body:has(.record:hover) .record:hover > .record__file {
+:is(.record:hover, .record:focus-within) > .record__file {
     /* width: calc(100% - var(--dimensions-trash)); */
     width: calc(100% - 2rem - var(--gaps)); /* 1 */
 }
-body:has(.record:hover) .record:hover > .record__trash {
+:is(.record:hover, .record:focus-within) > .record__trash {
     display: flex;
-    justify-content: center;
-    align-items: center;
-
-    height: calc(100% - var(--record-padding) * 2);
-    aspect-ratio: 1;
+}
+.record__trash:focus {
+    display: flex;
 }
 
 .record__trash {
@@ -619,6 +630,12 @@ body:has(.record:hover) .record:hover > .record__trash {
     border-radius: calc(
         var(--border-radius) - var(--record-padding)
     ) !important;
+
+    justify-content: center;
+    align-items: center;
+
+    height: calc(100% - var(--record-padding) * 2);
+    aspect-ratio: 1;
 }
 
 .record__title {
