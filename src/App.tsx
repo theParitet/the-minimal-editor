@@ -312,11 +312,7 @@ export default function App() {
                     The <span className="header__hero--highlight">Minimal</span>{' '}
                     Editor
                 </h1>
-                <button
-                    className="header__btn"
-                    onClick={addReadmeFile}
-                    aria-label="See info file"
-                >
+                <button className="header__btn" onClick={addReadmeFile}>
                     Learn more
                 </button>
                 <a

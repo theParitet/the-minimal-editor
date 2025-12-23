@@ -24,7 +24,7 @@ export default function SettingsContent({
                         elements.
                     </p>
 
-                    <h3>Theme</h3>
+                    <h2>Theme</h2>
                     <div className="settings__options">
                         <label
                             className="btn-img btn-img--default btn-inset"
@@ -74,8 +74,8 @@ export default function SettingsContent({
                     </div>
 
                     <div className="settings__options grid">
-                        <h3>Padding</h3>
-                        <h3>Smoothness</h3>
+                        <h2>Padding</h2>
+                        <h2>Smoothness</h2>
                         <input
                             type="range"
                             aria-label="Padding"
@@ -113,7 +113,7 @@ export default function SettingsContent({
                         />
                     </div>
 
-                    <h3>Preview</h3>
+                    <h2>Preview</h2>
                     <div
                         className={
                             'settings__options__preview ' +

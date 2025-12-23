@@ -47,7 +47,12 @@ export default function SettingsModal({
     }, []);
 
     return (
-        <main id="modal-container" aria-modal="true" role="dialog">
+        <main
+            id="modal-container"
+            aria-modal="true"
+            role="dialog"
+            aria-label="Settings"
+        >
             <div>
                 <div className="modal__top-bar">
                     <button
