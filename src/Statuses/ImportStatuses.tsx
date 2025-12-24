@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { ImportStatusType } from '../types';
 import ImportStatus from './ImportStatus';
 
@@ -10,10 +11,15 @@ export default function ImportStatuses({
     clearAllStatuses: () => void;
     statuses: ImportStatusType[];
 }) {
+    const fileReaderRef = useRef<HTMLInputElement>(null);
     const StatusesJSX = statuses.map(status => {
         return <ImportStatus fileData={status.files} key={status.id} />;
     });
     const placeholderJSX = <p className="placeholder">No imports yet...</p>;
+
+    useEffect(() => {
+        fileReaderRef.current?.focus();
+    }, []);
 
     return (
         <div className="statuses-container">
@@ -23,6 +29,7 @@ export default function ImportStatuses({
                 </label>
                 <input
                     id="file-reader"
+                    ref={fileReaderRef}
                     aria-label="Import a text file"
                     onChange={importFiles}
                     multiple={true}

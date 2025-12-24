@@ -34,12 +34,12 @@ export default function SettingsModal({
 
         setTimeout(() => {
             settingsCloseButton.current?.focus();
-        }, 10);
+        }, 1);
 
         return () => {
             setTimeout(() => {
                 settingsButton.focus();
-            }, 10);
+            }, 1);
             document.removeEventListener('keydown', closeModelWithEscape);
         };
     }, []);

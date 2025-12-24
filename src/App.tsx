@@ -164,7 +164,7 @@ export default function App() {
         setData('LAST_FILE_OPENED', -1);
     };
 
-    function switchFile(id: number) {
+    function switchToFile(id: number) {
         setFileId(id);
         setData('LAST_FILE_OPENED', id);
         setIsPanelCollapsed(true);
@@ -398,7 +398,12 @@ export default function App() {
                     <PanelFiles
                         id={fileId}
                         saves={saves}
-                        switchFile={switchFile}
+                        switchFile={(id: number) => {
+                            switchToFile(id);
+                            setTimeout(() => {
+                                titleRef.current?.focus();
+                            }, 1);
+                        }}
                         deleteFile={deleteFile}
                         preferences={preferences}
                     />
