@@ -152,6 +152,14 @@ export default function App() {
             setSaves(copy);
             setData('FILES_STORAGE', copy);
         }
+        if (fileId === -1) {
+            addNotification({
+                key: 'ALREADY_HAVE_README_OPENED',
+                type: 'info',
+                title: '',
+                description: "You're already on the learn more note.",
+            });
+        }
         setFileId(-1);
         setData('LAST_FILE_OPENED', -1);
     };
