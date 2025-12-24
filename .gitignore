@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# pa11y (temporary)
+a11y/outputs/*
+!a11y/outputs/.gitkeep

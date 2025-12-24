@@ -1,0 +1,13 @@
+{
+    "runners": ["axe", "htmlcs"],
+    "standard": "WCAG2AA",
+    "level": "warning",
+    "includeWarnings": true,
+    "wait": 1000,
+    "threshold": 100,
+    "ignore": [
+        "WCAG2AA.Principle1.Guideline1_4.1_4_3.G145.Alpha",
+        "WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Alpha",
+        "WCAG2AA.Principle1.Guideline1_4.1_4_10.C32,C31,C33,C38,SCR34,G206"
+    ]
+}

@@ -11,6 +11,9 @@
         "format:check": "prettier --check .",
         "lint": "eslint .",
         "ts:check": "tsc --noEmit",
+        "a11y": "pa11y http://localhost:5173/ --config a11y/pa11y.json",
+        "a11y:modal": "pa11y http://localhost:5173/ --config a11y/pa11y.audit-modal.json",
+        "a11y:all": "npm run a11y && npm run a11y:modal",
         "check": "npm run format:check && npm run lint && npm run ts:check"
     },
     "dependencies": {
@@ -27,6 +30,7 @@
         "eslint-plugin-react-hooks": "^5.2.0",
         "eslint-plugin-react-refresh": "^0.4.20",
         "globals": "^16.2.0",
+        "pa11y": "^9.0.1",
         "prettier": "^3.7.4",
         "typescript": "^5.9.3",
         "vite": "^7.2.7"

@@ -16,14 +16,22 @@ The Minimal Editor is a web-based plain text editor designed for simplicity and 
 - **Local Storage** – Data is automatically saved to the browser's local storage.
 - **Responsive Design** – Accounts for different devices and screen sizes.
 - **Configurable Appearance** – Customize the editor visuals through settings.
+- **Accessible** – Aligns with WCAG 2.1 Level AA accessability features including screen reader support, keyboard navigation, focus management [and more](/ACCESSIBILITY.md).
 
 ## Tech Stack
 
+### Core
+
 - **React 19**
-- **Vite**
 - **TypeScript**
 - **CSS**
+- **Vite**
+
+### Deployment and Tools
+
 - **GitHub Actions** for deployment on **GitHub Pages**
+- **Prettier** for formatting
+- **Pa11y** for accessability testing and auditing
 
 ## Getting Started
 
@@ -31,20 +39,20 @@ The list of operations to edit, run and preview the project locally:
 
 ### Install & Run
 
-1.  **Clone the repository** (through SSH in this case)
+1. **Clone the repository** (through SSH in this case)
 
     ```bash
     git clone git@github.com:theParitet/the-minimal-editor.git
     cd the-minimal-editor
     ```
 
-2.  **Install dependencies**
+2. **Install dependencies**
 
     ```bash
     npm install
     ```
 
-3.  **Start the development server**
+3. **Start the development server**
 
     ```bash
     npm run dev
@@ -79,6 +87,29 @@ npm run check
 ```
 
 The build is only accepted when these checks pass successfully.
+
+### Accessability Testing
+
+> [!NOTE]
+> The project will later move from Pa11y to Pa11y CI for better CI/CD integration and more streamlined test suite creation.
+
+Additionally, the project uses **Pa11y for accessability auditing/testing**. It is currently not enforced into CI/CD pipeline. Nevertheless, it is recommended to pass the audits without errors (or warnings that are easily dealt with).
+
+1. To run Pa11y, you need to start the development server first (`http://localhost:5173/`):
+
+    ```bash
+    npm run dev
+    ```
+
+2. Then run Pa11y all existing audits:
+
+    ```bash
+    npm run a11y:all
+    ```
+
+Note that the default [pa11y.json](/a11y/pa11y.json) audit is also used as a template for other audits.
+
+For extended information, refer to [ACCESSIBILITY.md](/ACCESSIBILITY.md).
 
 ## Project Structure
 
@@ -118,4 +149,4 @@ src/
 - Proper file structure (with directories)
 - Searching and sorting
 
-For extended roadmap, check out [TECH_ROADMAP.md](/TECH_ROADMAP.md).
+For extended roadmap, check out [ROADMAP.md](/ROADMAP.md).
