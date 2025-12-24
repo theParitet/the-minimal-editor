@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SettingsContent from './SettingsMenu';
 import cross from '../assets/pictures/cross.svg';
 import {
@@ -20,6 +20,7 @@ export default function SettingsModal({
     setData: SetDataFunction;
 }) {
     const [current, setCurrent] = useState<SettingsMenuType>('About');
+    const settingsCloseButton = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
         const settingsButton = document.activeElement as HTMLElement;
@@ -32,10 +33,7 @@ export default function SettingsModal({
         document.addEventListener('keydown', closeModelWithEscape);
 
         setTimeout(() => {
-            const d = document.getElementById(
-                'settings_menu_close_btn'
-            ) as HTMLElement;
-            d.focus();
+            settingsCloseButton.current?.focus();
         }, 10);
 
         return () => {
@@ -59,6 +57,7 @@ export default function SettingsModal({
                         id="settings_menu_close_btn"
                         className="btn-img btn-img--default"
                         onClick={closeModal}
+                        ref={settingsCloseButton}
                         aria-label="Close the settings modal"
                     >
                         <img src={cross} alt="Cross icon" />
