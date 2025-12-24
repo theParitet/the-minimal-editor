@@ -47,6 +47,22 @@ button {
     outline: 2px solid hsl(187, 52%, 80%, 0.5);
 }
 
+img {
+    -webkit-user-drag: none;
+    user-select: none;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -1068,10 +1084,4 @@ body:has(#file-reader:focus-visible) label[for='file-reader'] {
     margin: 0;
     font-weight: bolder;
     color: var(--color--accent--main);
-}
-
-img {
-    -webkit-user-drag: none;
-    user-select: none;
-    pointer-events: none;
 }
