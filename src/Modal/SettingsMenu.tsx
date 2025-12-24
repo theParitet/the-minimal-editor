@@ -19,104 +19,122 @@ export default function SettingsContent({
         case 'Appearance':
             return (
                 <>
-                    <p>
+                    <p className="secondary">
                         These settings are currently applied to a portion of the
                         elements.
                     </p>
 
                     <h2>Theme</h2>
-                    <div className="settings__options">
-                        <label
-                            className="btn-img btn-img--default btn-inset"
-                            htmlFor="btn-is-inset1"
-                        >
-                            <img src={search} alt="A magnifying glass icon" />
-                        </label>
-                        <label
-                            className="btn-img btn-img--default"
-                            htmlFor="btn-is-inset2"
-                        >
-                            <img src={search} alt="A magnifying glass icon" />
-                        </label>
-                    </div>
+                    <div className="modal__content__section">
+                        <div className="settings__options">
+                            <label
+                                className="btn-img btn-img--default btn-inset"
+                                htmlFor="btn-is-inset1"
+                            >
+                                <img
+                                    src={search}
+                                    alt="A magnifying glass icon"
+                                />
+                            </label>
+                            <label
+                                className="btn-img btn-img--default"
+                                htmlFor="btn-is-inset2"
+                            >
+                                <img
+                                    src={search}
+                                    alt="A magnifying glass icon"
+                                />
+                            </label>
+                        </div>
 
-                    <div className="settings__options">
-                        <input
-                            id="btn-is-inset1"
-                            aria-label="Inset theme"
-                            type="radio"
-                            name="option"
-                            onChange={() => {
-                                const pref = {
-                                    ...preferences,
-                                    inset: true,
-                                };
-                                setPreferences(pref);
-                                setData('USER_PREFERENCES', pref);
-                            }}
-                            checked={preferences.inset}
-                        />
-                        <input
-                            id="btn-is-inset2"
-                            aria-label="Modern theme"
-                            type="radio"
-                            name="option"
-                            onChange={() => {
-                                const pref = {
-                                    ...preferences,
-                                    inset: false,
-                                };
-                                setPreferences(pref);
-                                setData('USER_PREFERENCES', pref);
-                            }}
-                            checked={!preferences.inset}
-                        />
+                        <div className="settings__options">
+                            <input
+                                id="btn-is-inset1"
+                                aria-label="Inset theme"
+                                type="radio"
+                                name="option"
+                                onChange={() => {
+                                    const pref = {
+                                        ...preferences,
+                                        inset: true,
+                                    };
+                                    setPreferences(pref);
+                                    setData('USER_PREFERENCES', pref);
+                                }}
+                                checked={preferences.inset}
+                            />
+                            <input
+                                id="btn-is-inset2"
+                                aria-label="Modern theme"
+                                type="radio"
+                                name="option"
+                                onChange={() => {
+                                    const pref = {
+                                        ...preferences,
+                                        inset: false,
+                                    };
+                                    setPreferences(pref);
+                                    setData('USER_PREFERENCES', pref);
+                                }}
+                                checked={!preferences.inset}
+                            />
+                        </div>
                     </div>
 
                     <div className="settings__options grid">
-                        <h2>Padding</h2>
-                        <h2>Smoothness</h2>
-                        <input
-                            type="range"
-                            aria-label="Padding"
-                            min={0}
-                            max={1}
-                            step={0.05}
-                            onChange={e => {
-                                const pref: Preferences = {
-                                    ...preferences,
-                                    space: parseFloat(e.target.value),
-                                };
+                        <div>
+                            <h2>Padding</h2>
+                            <p className="secondary">
+                                Adds padding to the elements.
+                            </p>
+                            <input
+                                type="range"
+                                aria-label="Padding"
+                                min={0}
+                                max={1}
+                                step={0.05}
+                                onChange={e => {
+                                    const pref: Preferences = {
+                                        ...preferences,
+                                        space: parseFloat(e.target.value),
+                                    };
 
-                                setPreferences(pref);
-                                setData('USER_PREFERENCES', pref);
-                            }}
-                            value={preferences.space}
-                        />
+                                    setPreferences(pref);
+                                    setData('USER_PREFERENCES', pref);
+                                }}
+                                value={preferences.space}
+                            />
+                        </div>
+                        <div>
+                            <h2>Smoothness</h2>
+                            <p className="secondary">
+                                Makes the corners smoother.
+                            </p>
 
-                        <input
-                            type="range"
-                            aria-label="Smoothness"
-                            min={0}
-                            max={1}
-                            step={0.05}
-                            onChange={e => {
-                                const value = e.target.value;
-                                const pref: Preferences = {
-                                    ...preferences,
-                                    smoothness: parseFloat(value),
-                                };
-                                setPreferences(pref);
-                                setData('USER_PREFERENCES', pref);
-                            }}
-                            value={preferences.smoothness}
-                        />
+                            <input
+                                type="range"
+                                aria-label="Smoothness"
+                                min={0}
+                                max={1}
+                                step={0.05}
+                                onChange={e => {
+                                    const value = e.target.value;
+                                    const pref: Preferences = {
+                                        ...preferences,
+                                        smoothness: parseFloat(value),
+                                    };
+                                    setPreferences(pref);
+                                    setData('USER_PREFERENCES', pref);
+                                }}
+                                value={preferences.smoothness}
+                            />
+                        </div>
                     </div>
 
                     <h2>Preview</h2>
                     <div
                         className={
-                            'settings__options__preview ' +
+                            'modal__content__section ' +
                             (preferences.inset ? 'inset' : '')
                         }
                         style={{
@@ -129,7 +147,7 @@ export default function SettingsContent({
                             style={
                                 {
                                     margin: '0px auto',
-                                    width: '75%',
+                                    width: '234px',
                                     '--record-padding': `${preferences.space}rem`,
                                     '--border-radius': `${preferences.smoothness}rem`,
                                 } as CSSProperties
@@ -155,7 +173,7 @@ export default function SettingsContent({
                             style={
                                 {
                                     margin: '0px auto',
-                                    width: '75%',
+                                    width: '234px',
                                     '--record-padding': `${preferences.space}rem`,
                                     '--border-radius': `${preferences.smoothness}rem`,
                                 } as CSSProperties
