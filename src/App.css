@@ -158,7 +158,11 @@ input[type='range']::-webkit-slider-thumb {
     border-radius: 50%;
     background: #eee;
     box-shadow: 0 0 0.3rem #111;
-    border: 0.5px solid #ccc;
+    border: 0.05rem solid #ccc;
+    /* for glass theme: */
+    /* background: #eeeeee22;
+    backdrop-filter: blur(.1rem);
+    border: 0.05rem solid #eeeeee22; */
 }
 input[type='range']::-moz-range-thumb {
     appearance: none;
@@ -167,7 +171,7 @@ input[type='range']::-moz-range-thumb {
     border-radius: 50%;
     background: #eee;
     box-shadow: 0 0 0.3rem #111;
-    border: 0.5px solid #ccc;
+    border: 0.05rem solid #ccc;
 }
 
 a {
@@ -359,13 +363,11 @@ strong {
 .settings__options.grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    align-items: center;
 }
-.settings__options.grid input {
-    margin: 0;
+.settings__options.grid input[type='range'] {
+    margin: var(--padding-modal-content) 0;
     width: 100%;
-    align-self: stretch;
-    justify-self: stretch;
 }
 .settings__options__preview {
     /* min-height: 4rem; */
