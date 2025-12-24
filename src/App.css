@@ -18,6 +18,17 @@
     src: url(./assets/fonts/Rubik-VariableFont_wght.ttf);
 }
 
+p {
+    margin: 0;
+}
+
+ul,
+ol {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
 button {
     background-color: transparent;
     border: none;
@@ -206,19 +217,19 @@ strong {
     margin: 0.5em 0;
 }
 .modal__content h1 {
-    font-size: 1rem;
+    font-size: 1.2rem;
 }
 .modal__content h2 {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     border-width: 0.05rem;
 }
 .modal__content h3 {
-    font-size: 0.8rem;
+    font-size: 1rem;
     border-width: 0.05rem;
 }
 .modal__content p {
     margin: 0.2em 0;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     line-height: 1.25;
 }
 
@@ -281,7 +292,7 @@ strong {
     top: 50%;
 
     color: #eeeeeeaa;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
 }
 @media (pointer: coarse) {
     .modal__hint {
@@ -656,7 +667,7 @@ body:not(:has(.record__trash:hover)) .record:active {
 }
 
 .btn {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     cursor: pointer;
 
     background-color: transparent;
@@ -716,7 +727,8 @@ body:has(#file-reader:focus-visible) label[for='file-reader'] {
         inset 0 0 3rem -2.5rem #eeeeee44;
     /* inset 0 -1rem 1.5rem -2rem #eeeeee44; */
 
-    border: 0.1rem solid var(--color);
+    /* border: 0.1rem solid var(--color); */
+    border: 0.05rem solid #444;
 }
 
 .statuses-container__controls {
@@ -757,20 +769,22 @@ body:has(#file-reader:focus-visible) label[for='file-reader'] {
     display: flex;
     flex-direction: column;
 
-    background-color: #555;
+    background-color: hsl(0, 0%, 15%);
 
-    border-radius: 0.4rem;
+    --outer-br: 0.4rem;
+    border-radius: var(--outer-br);
 
     margin: 0;
     animation: expand 400ms cubic-bezier(0, 0, 0, 1) 1 forwards;
 
-    border: 2px solid var(--color--success--1);
+    --outer-b: 0.1rem;
+    border: var(--outer-b) solid var(--color--success--1);
 }
 .failure.status {
-    border: 2px solid var(--color--danger);
+    border: var(--outer-b) solid var(--color--danger);
 }
 .warning.status {
-    border: 2px solid var(--color--warning);
+    border: var(--outer-b) solid var(--color--warning);
 }
 
 .status__message {
@@ -778,24 +792,24 @@ body:has(#file-reader:focus-visible) label[for='file-reader'] {
     justify-content: space-between;
     align-items: center;
 
-    font-size: 0.875rem;
+    font-size: 0.9rem;
 
-    border-radius: 0.3rem;
-    padding: 0.4rem;
+    border-radius: calc(var(--outer-br) - var(--outer-b));
+    padding: 0.5rem;
 
-    background-color: #444;
+    background-color: hsl(0, 0%, 20%);
+}
+.status__message:focus,
+.status__message:hover {
+    background-color: hsl(0, 0%, 17.5%);
+}
+.status__message:active {
+    background-color: hsl(0, 0%, 15%);
 }
 .status__message > span {
     text-wrap: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-.status__message:focus,
-.status__message:hover {
-    background-color: #333333aa;
-}
-.status__message:active {
-    background-color: #333333;
 }
 
 .status__files {
@@ -808,10 +822,12 @@ body:has(#file-reader:focus-visible) label[for='file-reader'] {
 }
 
 .status-wrapper {
+    --spacing-value: 0.2rem;
+
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
+    gap: var(--spacing-value);
     font-size: 0.75rem;
 }
 .status__files__file__container {
@@ -819,26 +835,32 @@ body:has(#file-reader:focus-visible) label[for='file-reader'] {
     align-items: center;
     justify-content: space-between;
 
-    padding: 0.3rem;
-    border-radius: 0.3rem;
-    background-color: #444;
-    border: 0.3rem solid #363636;
+    --inner-padding: 0.2rem;
+
+    padding: var(--inner-padding);
+    --inner-br: calc(var(--outer-br) - var(--outer-b) - var(--spacing-value));
+    border-radius: var(--inner-br);
+    background-color: #111111;
+    border: max(0.2rem, var(--inner-br)) solid white;
     border-style: hidden hidden hidden solid;
 
-    gap: 0.2rem;
-    margin: 0 0.2rem;
+    gap: var(--inner-padding);
+
+    margin: 0 var(--spacing-value);
 }
 .status__files__file__container:has(.error.status__check) {
     border-color: var(--color--danger);
+    background-color: hsl(0, 20%, 30%, 0.5);
 }
 .status__files__file__container:has(.status__check) {
+    background-color: hsl(120, 20%, 30%, 0.5);
     border-color: var(--color--success--2);
 }
 .status__files__file__container:first-child {
-    margin-top: 0.2rem;
+    margin-top: var(--spacing-value);
 }
 .status__files__file__container:last-child {
-    margin-bottom: 0.2rem;
+    margin-bottom: var(--spacing-value);
 }
 
 .status__check {
