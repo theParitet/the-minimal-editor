@@ -15,7 +15,7 @@ export default function PanelFiles({
     preferences: Preferences;
 }) {
     return (
-        <section className="panel__files">
+        <section className="panel__files" role="list" aria-label="Saved files">
             {saves.length ? (
                 saves.map(file => {
                     const isSelected = file.id === id;
@@ -31,12 +31,7 @@ export default function PanelFiles({
                     );
                 })
             ) : (
-                <p
-                    style={{
-                        textAlign: 'center',
-                        color: '#aaa',
-                    }}
-                >
+                <p className="placeholder" role="listitem">
                     Nothing here yet...
                 </p>
             )}

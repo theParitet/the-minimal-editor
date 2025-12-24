@@ -348,13 +348,11 @@ export default function App() {
                     document.body
                 )}
 
-            {notifications.length !== 0 && (
-                <Notifications
-                    notifications={notifications}
-                    removeNotificationByKey={removeNotificationByKey}
-                    inert={inert}
-                />
-            )}
+            <Notifications
+                notifications={notifications}
+                removeNotificationByKey={removeNotificationByKey}
+                inert={inert}
+            />
 
             <main
                 id="manager"

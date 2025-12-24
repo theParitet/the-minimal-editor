@@ -22,7 +22,7 @@ export default function ImportStatuses({
     }, []);
 
     return (
-        <div className="statuses-container">
+        <div id="import-panel" className="statuses-container">
             <div className="statuses-container__controls">
                 <label htmlFor="file-reader" className="btn btn--default">
                     Import
@@ -45,9 +45,9 @@ export default function ImportStatuses({
                     Clear
                 </button>
             </div>
-            <div className="statuses-container__imports">
+            <ul className="statuses-container__imports">
                 {statuses.length ? StatusesJSX : placeholderJSX}
-            </div>
+            </ul>
         </div>
     );
 }

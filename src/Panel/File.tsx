@@ -22,6 +22,7 @@ export default function File({
     return (
         <div
             className={classNameRecord}
+            role="listitem"
             style={
                 {
                     '--record-padding': `${preferences.space}rem`,
@@ -32,7 +33,8 @@ export default function File({
             <button
                 className={'record__file'}
                 onClick={switchFile}
-                aria-label={`Switch to ${title} file`}
+                aria-current={isSelected ? 'true' : undefined}
+                aria-label={`${title || 'Untitled file'}${isSelected ? ', currently open' : ''}`}
             >
                 <img src={file} alt="File icon" />
                 <span className={classNameTitle}>{title || 'Empty Title'}</span>
@@ -40,7 +42,7 @@ export default function File({
             <button
                 className="btn-img btn-img--danger record__trash"
                 onClick={deleteFile}
-                aria-label="Delete this file"
+                aria-label={`Delete ${title || 'untitled'} file`}
             >
                 <img src={trash} alt="Trash icon" />
             </button>

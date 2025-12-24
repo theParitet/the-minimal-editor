@@ -32,14 +32,14 @@ export default function ImportStatus({
             classNameCheck += ' error';
         }
         return (
-            <div className="status__files__file__container" key={index}>
-                <div className={classNameFile}>{file.title}</div>
+            <li className="status__files__file__container" key={index}>
+                <p className={classNameFile}>{file.title}</p>
                 <img
                     className={classNameCheck}
                     src={file.error ? cross : check}
                     alt={file.error ? 'A cross icon' : 'A check icon'}
                 />
-            </div>
+            </li>
         );
     });
 
@@ -53,17 +53,18 @@ export default function ImportStatus({
         classNameStatus += ' warning';
         message = 'Imported partially';
     }
-    const placeholderJSX = <div className="placeholder">No files</div>;
+    const placeholderJSX = (
+        <li>
+            <p className="placeholder">No files</p>
+        </li>
+    );
     return (
-        <div className={classNameStatus}>
+        <li className={classNameStatus} role="status">
             <button
                 className="status__message"
                 onClick={toggleImportStatusCollapse}
-                aria-label={
-                    isCollapsed
-                        ? 'Expand the import status'
-                        : 'Collapse the import status'
-                }
+                aria-expanded={!isCollapsed}
+                aria-label={message}
             >
                 <span>{message}</span>
                 <div
@@ -72,6 +73,7 @@ export default function ImportStatus({
                             ? 'btn-img arrow collapsed'
                             : 'btn-img arrow'
                     }
+                    aria-hidden={true}
                 >
                     <img
                         className="img--arrow"
@@ -85,11 +87,12 @@ export default function ImportStatus({
                 className={
                     isCollapsed ? 'status__files collapsed' : 'status__files'
                 }
+                aria-hidden={isCollapsed}
             >
-                <div className="status-wrapper">
+                <ul className="status-wrapper">
                     {!totalFiles ? placeholderJSX : filesJSX}
-                </div>
+                </ul>
             </div>
-        </div>
+        </li>
     );
 }

@@ -40,7 +40,9 @@ export default function PanelControls({
                             : 'btn-img btn-img--default'
                     }
                     onClick={toggleImportPanelCollapse}
-                    aria-label="Show import panel"
+                    aria-label="Import panel"
+                    aria-expanded={!isCollapsed}
+                    aria-controls="import-panel"
                 >
                     <img src={upload} alt="Import icon" />
                 </button>
@@ -72,7 +74,8 @@ export default function PanelControls({
                         openSettingsModal();
                         setIsCollapsed(true);
                     }}
-                    aria-label="Open settings modal"
+                    aria-label="Settings"
+                    aria-haspopup="dialog"
                 >
                     <img src={settings} alt="Settings icon" />
                 </button>

@@ -33,7 +33,7 @@ export default function Notifications({
 
     const notificationsJSX = repeat.map(record => {
         return (
-            <div
+            <li
                 className={'notification ' + record.type}
                 key={record.key}
                 role={record.type === 'danger' ? 'alert' : 'status'}
@@ -62,19 +62,19 @@ export default function Notifications({
                 >
                     <img src={cross} alt="Cross icon" />
                 </button>
-            </div>
+            </li>
         );
     });
 
     return (
-        <div
+        <ul
             inert={inert}
             className="notification-container"
             role="status"
             aria-live="polite"
             aria-atomic="true"
         >
-            {notificationsJSX}
-        </div>
+            {notifications.length !== 0 && notificationsJSX}
+        </ul>
     );
 }

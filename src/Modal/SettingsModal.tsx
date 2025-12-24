@@ -78,7 +78,9 @@ export default function SettingsModal({
                                     }
                                     onClick={() => setCurrent(option)}
                                     key={option}
-                                    aria-label={`Switch to ${option} menu`}
+                                    aria-current={
+                                        current === option ? 'page' : undefined
+                                    }
                                 >
                                     {option}
                                 </button>
